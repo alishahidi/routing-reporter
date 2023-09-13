@@ -1,0 +1,15 @@
+jwt:
+  token: ac7b9c76236ae1e80f181586a980d292a1a6eb14e3beeaa97d01523ef2a571b1
+
+spring:
+  datasource:
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/traffic
+    password: 1376gtid
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: 'false'
+server:
+  error:
+    include-message: always
