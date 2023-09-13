@@ -36,12 +36,19 @@ public class User implements UserDetails {
     String password;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    Role role;
 
     @CreationTimestamp
     Date createdAt;
     @UpdateTimestamp
     Date updatedAt;
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            mappedBy = "user"
+    )
+    @JsonIgnore
+    List<Report> reports;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
