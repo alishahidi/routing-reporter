@@ -50,6 +50,13 @@ public class User implements UserDetails {
     @JsonIgnore
     List<Report> reports;
 
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            mappedBy = "user"
+    )
+    @JsonIgnore
+    List<Route> routes;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
