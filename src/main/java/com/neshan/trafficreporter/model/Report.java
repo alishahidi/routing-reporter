@@ -9,6 +9,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.locationtech.jts.geom.Point;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -29,7 +31,7 @@ public class Report {
 
     Boolean isAccept;
 
-    Double ttl;
+    LocalDateTime expiredAt;
 
     @ManyToOne
     @JoinColumn(
@@ -39,7 +41,7 @@ public class Report {
     @JsonIgnore
     User user;
 
-    @Column(columnDefinition = "geometry(Point,4326)")
+    @Column(columnDefinition = "geometry(Point,3857)")
     Point location;
 
     Integer likeCount;

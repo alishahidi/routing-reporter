@@ -3,7 +3,6 @@ package com.neshan.trafficreporter.dto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.locationtech.jts.geom.LineString;
-import org.locationtech.jts.geom.Point;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,8 +12,5 @@ import org.locationtech.jts.geom.Point;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RouteDto {
     Long id;
-    Point startLocation;
-    Point endLocation;
     LineString route;
-
 }

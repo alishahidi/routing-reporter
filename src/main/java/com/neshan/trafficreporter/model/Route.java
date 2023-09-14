@@ -28,12 +28,6 @@ public class Route {
     @JsonIgnore
     User user;
 
-    @Column(columnDefinition = "geometry(Point,4326)")
-    Point startLocation;
-
-    @Column(columnDefinition = "geometry(Point,4326)")
-    Point endLocation;
-
-    @Column(columnDefinition = "geometry(LineString,4326)")
+    @Column(columnDefinition = "geometry(LineString,3857)")
     LineString route;
 }
