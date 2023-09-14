@@ -30,13 +30,17 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(
-                                new AntPathRequestMatcher("/api/v*/auth/register"),
-                                new AntPathRequestMatcher("/api/v*/auth/login")
+                                "/api/v*/auth/register",
+                                "/api/v*/auth/login"
                         ).permitAll()
-                        .requestMatchers(
-                                new AntPathRequestMatcher("/api/v*/traffic/**")
-                                ).hasAnyRole(Role.USER.name(), Role.ADMIN.name())
-                        .anyRequest().authenticated())
+//                        .requestMatchers(
+//                                "/api/v*/report/**"
+//                        ).hasAnyRole(Role.USER.name(), Role.ADMIN.name())
+//                        .requestMatchers(
+//                                "/api/v*/operator/**"
+//                        ).hasAnyRole(Role.OPERATOR.name(), Role.USER.name())
+                        .anyRequest().authenticated()
+                )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
