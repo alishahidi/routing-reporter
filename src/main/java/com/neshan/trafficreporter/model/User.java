@@ -45,14 +45,16 @@ public class User implements UserDetails {
 
     @OneToMany(
             cascade = CascadeType.ALL,
-            mappedBy = "user"
+            mappedBy = "user",
+            fetch = FetchType.EAGER
     )
     @JsonIgnore
     List<Report> reports;
 
     @OneToMany(
             cascade = CascadeType.ALL,
-            mappedBy = "user"
+            mappedBy = "user",
+            fetch = FetchType.EAGER
     )
     @JsonIgnore
     List<Route> routes;
