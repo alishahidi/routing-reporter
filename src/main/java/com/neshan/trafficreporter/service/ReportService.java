@@ -32,4 +32,11 @@ public class ReportService {
                 .map(ReportMapper.INSTANCE::reportToReportDto)
                 .toList();
     }
+
+    public List<ReportDto> getAllReport(){
+        return reportRepository.findAll()
+                .stream()
+                .map(ReportMapper.INSTANCE::reportToReportDto)
+                .toList();
+    }
 }
