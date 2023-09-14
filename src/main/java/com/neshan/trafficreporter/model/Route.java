@@ -35,5 +35,5 @@ public class Route {
     Point endLocation;
 
     @Column(columnDefinition = "geometry(LineString,4326)")
-    LineString location;
+    LineString route;
 }
