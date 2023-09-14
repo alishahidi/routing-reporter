@@ -13,7 +13,6 @@ import org.locationtech.jts.geom.Point;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RouteDto {
     Long id;
-    UserDto user;
     Point startLocation;
     Point endLocation;
     LineString route;

@@ -18,7 +18,6 @@ public class ReportDto {
     ReportType type;
     Boolean isAccept;
     Double ttl;
-    UserDto user;
     Point location;
     Integer likeCount;
     Date createdAt;
