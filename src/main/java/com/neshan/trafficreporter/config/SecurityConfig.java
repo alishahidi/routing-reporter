@@ -1,5 +1,6 @@
 package com.neshan.trafficreporter.config;
 
+import com.neshan.trafficreporter.enums.Role;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -32,6 +33,9 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/api/v*/auth/register"),
                                 new AntPathRequestMatcher("/api/v*/auth/login")
                         ).permitAll()
+                        .requestMatchers(
+                                new AntPathRequestMatcher("/api/v*/traffic/**")
+                                ).hasAnyRole(Role.USER.name(), Role.ADMIN.name())
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.neshan</groupId>
-    <artifactId>traffic-reporter</artifactId>
+    <artifactId>routing-reporter</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>traffic-reporter</name>
-    <description>traffic-reporter</description>
+    <name>routing-reporter</name>
+    <description>routing-reporter</description>
     <properties>
         <java.version>17</java.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
