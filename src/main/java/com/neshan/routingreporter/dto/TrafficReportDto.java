@@ -1,27 +1,16 @@
 package com.neshan.routingreporter.dto;
 
-import com.neshan.routingreporter.enums.ReportType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.locationtech.jts.geom.Point;
-
-import java.time.LocalDateTime;
-import java.util.Date;
+import lombok.experimental.SuperBuilder;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TrafficReportDto {
-    Long id;
-    Point location;
+public class TrafficReportDto extends ReportDto{
     Boolean isAccept;
-    Integer likeCount;
-    LocalDateTime expiredAt;
-    String someValue;
-    Date createdAt;
-    Date updatedAt;
 
 }

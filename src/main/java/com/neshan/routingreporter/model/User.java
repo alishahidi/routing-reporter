@@ -1,6 +1,7 @@
 package com.neshan.routingreporter.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.neshan.routingreporter.dto.ReportDto;
 import com.neshan.routingreporter.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -49,23 +50,7 @@ public class User implements UserDetails {
             fetch = FetchType.EAGER
     )
     @JsonIgnore
-    List<TrafficReport> trafficReports;
-
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            mappedBy = "user",
-            fetch = FetchType.EAGER
-    )
-    @JsonIgnore
-    List<AccidentReport> accidentReports;
-
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            mappedBy = "user",
-            fetch = FetchType.EAGER
-    )
-    @JsonIgnore
-    List<PoliceReport> policeReports;
+    List<Report> reports;
 
     @OneToMany(
             cascade = CascadeType.ALL,

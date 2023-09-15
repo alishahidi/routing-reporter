@@ -1,15 +1,15 @@
 package com.neshan.routingreporter.service;
 
 import com.neshan.routingreporter.config.ReportConfig;
-import com.neshan.routingreporter.dto.AccidentReportDto;
 import com.neshan.routingreporter.dto.PoliceReportDto;
-import com.neshan.routingreporter.mapper.AccidentReportMapper;
+import com.neshan.routingreporter.dto.ReportDto;
+import com.neshan.routingreporter.enums.ReportType;
+import com.neshan.routingreporter.interfaces.ReportInterface;
 import com.neshan.routingreporter.mapper.PoliceReportMapper;
-import com.neshan.routingreporter.model.AccidentReport;
 import com.neshan.routingreporter.model.PoliceReport;
 import com.neshan.routingreporter.model.User;
-import com.neshan.routingreporter.repository.AccidentReportRepository;
 import com.neshan.routingreporter.repository.PoliceReportRepository;
+import com.neshan.routingreporter.request.ReportRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -24,17 +24,20 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class PoliceReportService {
+public class PoliceReportService implements ReportInterface {
     RedissonClient redissonClient;
     ReportConfig reportConfig;
     PoliceReportRepository policeReportRepository;
 
-    public PoliceReportDto create(PoliceReportDto reportDto) {
+    @Override
+    public ReportDto create(ReportRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ReportDto reportDto = request.getReport();
         Point point = reportDto.getLocation();
         point.setSRID(3857);
 
@@ -52,6 +55,8 @@ public class PoliceReportService {
                                 PoliceReport.builder()
                                         .expiredAt(LocalDateTime.now().plusMinutes(reportConfig.getInitPoliceTtl()))
                                         .user(user)
+                                        .type(ReportType.POLICE)
+                                        .someValue(reportDto.getSomeValue())
                                         .likeCount(0)
                                         .location(reportDto.getLocation())
                                         .build()
@@ -67,13 +72,15 @@ public class PoliceReportService {
         }
     }
 
-    public List<PoliceReportDto> getAll() {
+    @Override
+    public List<ReportDto> getAll() {
         return policeReportRepository.findAll()
                 .stream()
                 .map(PoliceReportMapper.INSTANCE::policeReportToPoliceReportDto)
-                .toList();
+                .collect(Collectors.toList());
     }
 
+    @Override
     public PoliceReportDto like(Long id) {
         PoliceReport report = policeReportRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -82,6 +89,7 @@ public class PoliceReportService {
         return PoliceReportMapper.INSTANCE.policeReportToPoliceReportDto(policeReportRepository.save(report));
     }
 
+    @Override
     public PoliceReportDto disLike(Long id) {
         PoliceReport report = policeReportRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -90,7 +98,8 @@ public class PoliceReportService {
         return PoliceReportMapper.INSTANCE.policeReportToPoliceReportDto(policeReportRepository.save(report));
     }
 
-    public List<Integer> findTopPoliceHours(Integer limit) {
+    @Override
+    public List<Integer> findTopHours(Integer limit) {
         return policeReportRepository.findTopPoliceHours(limit);
     }
 }

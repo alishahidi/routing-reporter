@@ -1,6 +1,9 @@
 package com.neshan.routingreporter.controller;
 
-import com.neshan.routingreporter.dto.TrafficReportDto;
+import com.neshan.routingreporter.component.ReportFactory;
+import com.neshan.routingreporter.dto.ReportDto;
+import com.neshan.routingreporter.enums.ReportType;
+import com.neshan.routingreporter.service.ReportService;
 import com.neshan.routingreporter.service.TrafficReportService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -14,15 +17,19 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class OperatorV1Controller {
-    TrafficReportService trafficReportService;
+    ReportFactory reportFactory;
+    ReportService reportService;
 
-    @GetMapping("/report/traffic/get")
-    public List<TrafficReportDto> getAll(@RequestParam(name = "type", required = false) String type) {
-        return trafficReportService.getAll();
+    @GetMapping("/report/get")
+    public List<ReportDto> getAll(@RequestParam(name = "type", required = false) String type) {
+        if (type == null) {
+            return reportService.getAll();
+        }
+        return reportFactory.makeReport(ReportType.valueOf(type.toUpperCase())).getAll();
     }
 
-    @PutMapping("/report/traffic/accept/{id}")
-    public TrafficReportDto accept(@PathVariable Long id) {
-        return trafficReportService.accept(id);
+    @PutMapping("/report/accept/{id}")
+    public ReportDto accept(@PathVariable Long id) {
+        return reportFactory.makeReport(reportFactory.findTypeByClass(reportService.getById(id))).accept(id);
     }
 }

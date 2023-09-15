@@ -18,9 +18,7 @@ public class UserDto {
     String name;
     String username;
     Role role;
-    List<TrafficReportDto> trafficReports;
-    List<AccidentReportDto> accidentReports;
-    List<PoliceReportDto> policeReports;
+    List<ReportDto> reports;
     List<RouteDto> routes;
     Date createdAt;
     Date updatedAt;

@@ -2,10 +2,15 @@ package com.neshan.routingreporter.service;
 
 import com.neshan.routingreporter.config.ReportConfig;
 import com.neshan.routingreporter.dto.AccidentReportDto;
+import com.neshan.routingreporter.dto.ReportDto;
+import com.neshan.routingreporter.enums.ReportType;
+import com.neshan.routingreporter.interfaces.ReportInterface;
 import com.neshan.routingreporter.mapper.AccidentReportMapper;
+import com.neshan.routingreporter.mapper.ReportMapper;
 import com.neshan.routingreporter.model.AccidentReport;
 import com.neshan.routingreporter.model.User;
 import com.neshan.routingreporter.repository.AccidentReportRepository;
+import com.neshan.routingreporter.request.ReportRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,17 +25,20 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class AccidentReportService {
+public class AccidentReportService implements ReportInterface {
     RedissonClient redissonClient;
     ReportConfig reportConfig;
     AccidentReportRepository accidentReportRepository;
 
-    public AccidentReportDto create(AccidentReportDto reportDto) {
+    @Override
+    public ReportDto create(ReportRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ReportDto reportDto = request.getReport();
         Point point = reportDto.getLocation();
         point.setSRID(3857);
 
@@ -43,12 +51,22 @@ public class AccidentReportService {
                 if (accidentReportRepository.existsAccidentReportByLocationAndExpiredAt(point)) {
                     throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Duplicated request.");
                 }
+                AccidentReport accidentReport = AccidentReport.builder()
+                        .expiredAt(LocalDateTime.now().plusMinutes(reportConfig.getInitAccidentTtl()))
+                        .user(user)
+                        .likeCount(0)
+                        .someValue(reportDto.getSomeValue())
+                        .location(reportDto.getLocation())
+                        .build();
+                System.out.println(accidentReport.getSomeValue());
                 return AccidentReportMapper.INSTANCE.accidentReportToAccidentReportDto(
                         accidentReportRepository.save(
                                 AccidentReport.builder()
                                         .expiredAt(LocalDateTime.now().plusMinutes(reportConfig.getInitAccidentTtl()))
                                         .user(user)
                                         .likeCount(0)
+                                        .type(ReportType.ACCIDENT)
+                                        .someValue(reportDto.getSomeValue())
                                         .location(reportDto.getLocation())
                                         .build()
                         )
@@ -63,14 +81,16 @@ public class AccidentReportService {
         }
     }
 
-    public List<AccidentReportDto> getAll() {
+    @Override
+    public List<ReportDto> getAll() {
         return accidentReportRepository.findAll()
                 .stream()
                 .map(AccidentReportMapper.INSTANCE::accidentReportToAccidentReportDto)
-                .toList();
+                .collect(Collectors.toList());
     }
 
-    public AccidentReportDto like(Long id) {
+    @Override
+    public ReportDto like(Long id) {
         AccidentReport report = accidentReportRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         report.setLikeCount(report.getLikeCount() + 1);
@@ -78,7 +98,8 @@ public class AccidentReportService {
         return AccidentReportMapper.INSTANCE.accidentReportToAccidentReportDto(accidentReportRepository.save(report));
     }
 
-    public AccidentReportDto disLike(Long id) {
+    @Override
+    public ReportDto disLike(Long id) {
         AccidentReport report = accidentReportRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         report.setLikeCount(report.getLikeCount() - 1);
@@ -86,7 +107,8 @@ public class AccidentReportService {
         return AccidentReportMapper.INSTANCE.accidentReportToAccidentReportDto(accidentReportRepository.save(report));
     }
 
-    public List<Integer> findTopAccidentHours(Integer limit) {
+    @Override
+    public List<Integer> findTopHours(Integer limit) {
         return accidentReportRepository.findTopAccidentHours(limit);
     }
 }
