@@ -1,13 +1,11 @@
 package com.neshan.routingreporter.service;
 
 import com.neshan.routingreporter.config.ReportConfig;
-import com.neshan.routingreporter.dto.ReportDto;
-import com.neshan.routingreporter.enums.ReportType;
-import com.neshan.routingreporter.interfaces.ReportInterface;
-import com.neshan.routingreporter.mapper.ReportMapper;
-import com.neshan.routingreporter.model.Report;
+import com.neshan.routingreporter.dto.TrafficReportDto;
+import com.neshan.routingreporter.mapper.TrafficReportMapper;
+import com.neshan.routingreporter.model.TrafficReport;
 import com.neshan.routingreporter.model.User;
-import com.neshan.routingreporter.repository.ReportRepository;
+import com.neshan.routingreporter.repository.TrafficReportRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -26,13 +24,12 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class TrafficReportService implements ReportInterface {
-    ReportRepository reportRepository;
+public class TrafficReportService {
     RedissonClient redissonClient;
     ReportConfig reportConfig;
+    TrafficReportRepository trafficReportRepository;
 
-    @Override
-    public ReportDto create(ReportDto reportDto) {
+    public TrafficReportDto create(TrafficReportDto reportDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Point point = reportDto.getLocation();
         point.setSRID(3857);
@@ -43,19 +40,19 @@ public class TrafficReportService implements ReportInterface {
         try {
             boolean isLocked = lock.tryLock(40, TimeUnit.SECONDS);
             if (isLocked) {
-                if (reportRepository.existsReportByLocationAndExpiredAt(point, ReportType.TRAFFIC)) {
+                if (trafficReportRepository.existsTrafficReportByLocationAndExpiredAt(point)) {
                     throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Duplicated request.");
                 }
-                return ReportMapper.INSTANCE.reportToReportDto(reportRepository.save(
-                        Report.builder()
-                                .expiredAt(LocalDateTime.now().plusMinutes(reportConfig.getInitTrafficTtl()))
-                                .type(ReportType.TRAFFIC)
-                                .isAccept(false)
-                                .user(user)
-                                .likeCount(0)
-                                .location(reportDto.getLocation())
-                                .build()
-                ));
+                return TrafficReportMapper.INSTANCE.trafficReportToTrafficReportDto(
+                        trafficReportRepository.save(
+                                TrafficReport.builder()
+                                        .expiredAt(LocalDateTime.now().plusMinutes(reportConfig.getInitTrafficTtl()))
+                                        .isAccept(false)
+                                        .user(user)
+                                        .likeCount(0)
+                                        .location(reportDto.getLocation())
+                                        .build())
+                );
             } else {
                 return null;
             }
@@ -66,38 +63,35 @@ public class TrafficReportService implements ReportInterface {
         }
     }
 
-    @Override
-    public List<ReportDto> getAll() {
-        return reportRepository.findAllByType(ReportType.TRAFFIC)
+    public List<TrafficReportDto> getAll() {
+        return trafficReportRepository.findAll()
                 .stream()
-                .map(ReportMapper.INSTANCE::reportToReportDto)
+                .map(TrafficReportMapper.INSTANCE::trafficReportToTrafficReportDto)
                 .toList();
     }
 
-    @Override
-    public ReportDto like(Long id) {
-        Report report = reportRepository.findById(id)
+    public TrafficReportDto like(Long id) {
+        TrafficReport report = trafficReportRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         report.setLikeCount(report.getLikeCount() + 1);
         report.setExpiredAt(LocalDateTime.now().plusMinutes(reportConfig.getLikeTrafficTtl()));
-        return ReportMapper.INSTANCE.reportToReportDto(reportRepository.save(report));
+        return TrafficReportMapper.INSTANCE.trafficReportToTrafficReportDto(trafficReportRepository.save(report));
     }
 
-    @Override
-    public ReportDto disLike(Long id) {
-        Report report = reportRepository.findById(id)
+    public TrafficReportDto disLike(Long id) {
+        TrafficReport report = trafficReportRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         report.setLikeCount(report.getLikeCount() - 1);
         report.setExpiredAt(report.getExpiredAt().minusMinutes(reportConfig.getDisLikeTrafficTtl()));
-        return ReportMapper.INSTANCE.reportToReportDto(reportRepository.save(report));
+        return TrafficReportMapper.INSTANCE.trafficReportToTrafficReportDto(trafficReportRepository.save(report));
     }
 
-    @Override
-    public ReportDto accept(Long id) {
-        Report report = reportRepository.findById(id)
+    public TrafficReportDto accept(Long id) {
+        TrafficReport report = trafficReportRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
         report.setIsAccept(true);
         report.setExpiredAt(LocalDateTime.now().plusMinutes(reportConfig.getInitTrafficTtl()));
-        return ReportMapper.INSTANCE.reportToReportDto(reportRepository.save(report));
+        return TrafficReportMapper.INSTANCE.trafficReportToTrafficReportDto(trafficReportRepository.save(report));
     }
 }

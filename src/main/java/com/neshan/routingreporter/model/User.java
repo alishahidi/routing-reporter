@@ -49,7 +49,7 @@ public class User implements UserDetails {
             fetch = FetchType.EAGER
     )
     @JsonIgnore
-    List<Report> reports;
+    List<TrafficReport> trafficReports;
 
     @OneToMany(
             cascade = CascadeType.ALL,

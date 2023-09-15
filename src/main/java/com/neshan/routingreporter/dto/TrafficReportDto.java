@@ -14,13 +14,13 @@ import java.util.Date;
 @Setter
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ReportDto {
+public class TrafficReportDto {
     Long id;
-    ReportType type;
-    Boolean isAccept;
     Point location;
+    Boolean isAccept;
     Integer likeCount;
     LocalDateTime expiredAt;
+    String someValue;
     Date createdAt;
     Date updatedAt;
 

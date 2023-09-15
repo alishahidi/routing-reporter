@@ -1,26 +1,16 @@
 package com.neshan.routingreporter.dto;
 
-import com.neshan.routingreporter.enums.Role;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Date;
 import java.util.List;
 
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserDto {
-    Long id;
-    String name;
-    String username;
-    Role role;
+public class RouteReportsDto {
     List<TrafficReportDto> trafficReports;
-    List<RouteDto> routes;
-    Date createdAt;
-    Date updatedAt;
-
 }

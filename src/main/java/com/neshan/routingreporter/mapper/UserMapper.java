@@ -1,10 +1,8 @@
 package com.neshan.routingreporter.mapper;
 
-import com.neshan.routingreporter.dto.ReportDto;
-import com.neshan.routingreporter.dto.RouteDto;
-import com.neshan.routingreporter.dto.UserDto;
-import com.neshan.routingreporter.model.Report;
+import com.neshan.routingreporter.dto.*;
 import com.neshan.routingreporter.model.Route;
+import com.neshan.routingreporter.model.TrafficReport;
 import com.neshan.routingreporter.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -15,8 +13,8 @@ public interface UserMapper {
 
     UserDto userToUserDTO(User user);
 
-    default ReportDto reportToReportDto(Report report) {
-        return Mappers.getMapper(ReportMapper.class).reportToReportDto(report);
+    default TrafficReportDto trafficReportToTrafficReportDto(TrafficReport report) {
+        return Mappers.getMapper(TrafficReportMapper.class).trafficReportToTrafficReportDto(report);
     }
 
     default RouteDto routeToRouteDto(Route route) {
