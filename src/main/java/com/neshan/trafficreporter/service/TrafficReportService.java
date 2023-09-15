@@ -36,7 +36,7 @@ public class TrafficReportService implements ReportInterface {
         Point point = reportDto.getLocation();
         point.setSRID(3857);
 
-        String lockKey = "report_creation_lock_" + user.getId();
+        String lockKey = "traffic_report_creation_lock_" + user.getId();
         RLock lock = redissonClient.getLock(lockKey);
 
         try {
