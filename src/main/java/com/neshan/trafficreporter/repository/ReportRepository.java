@@ -19,6 +19,6 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     @Query("SELECT r.type FROM Report r WHERE r.id = ?1")
     ReportType findTypeById(Long id);
 
-    @Query("SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END FROM Report r WHERE ST_Equals(r.location, ?1) = true AND r.expiredAt > CURRENT_TIMESTAMP")
-    boolean existsReportByLocationAndExpiredAt(Point point);
+    @Query("SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END FROM Report r WHERE ST_Equals(r.location, ?1) = true AND r.expiredAt > CURRENT_TIMESTAMP AND r.type = ?2")
+    boolean existsReportByLocationAndExpiredAt(Point point, ReportType type);
 }

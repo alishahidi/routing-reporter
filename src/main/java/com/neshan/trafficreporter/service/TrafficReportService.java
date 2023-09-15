@@ -43,7 +43,7 @@ public class TrafficReportService implements ReportInterface {
         try {
             boolean isLocked = lock.tryLock(40, TimeUnit.SECONDS);
             if (isLocked) {
-                if (reportRepository.existsReportByLocationAndExpiredAt(point)) {
+                if (reportRepository.existsReportByLocationAndExpiredAt(point, ReportType.TRAFFIC)) {
                     throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Duplicated request.");
                 }
                 return ReportMapper.INSTANCE.reportToReportDto(reportRepository.save(
