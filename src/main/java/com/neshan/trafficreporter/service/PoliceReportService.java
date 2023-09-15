@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class TrafficReportService implements ReportInterface {
+public class PoliceReportService implements ReportInterface {
     ReportRepository reportRepository;
     RedissonClient redissonClient;
     ReportConfig reportConfig;
@@ -37,20 +37,20 @@ public class TrafficReportService implements ReportInterface {
         Point point = reportDto.getLocation();
         point.setSRID(3857);
 
-        String lockKey = "traffic_report_creation_lock_" + user.getId();
+        String lockKey = "police_report_creation_lock_" + user.getId();
         RLock lock = redissonClient.getLock(lockKey);
 
         try {
             boolean isLocked = lock.tryLock(40, TimeUnit.SECONDS);
             if (isLocked) {
-                if (reportRepository.existsReportByLocationAndExpiredAt(point, ReportType.TRAFFIC)) {
+                if (reportRepository.existsReportByLocationAndExpiredAt(point, ReportType.POLICE)) {
                     throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Duplicated request.");
                 }
                 return ReportMapper.INSTANCE.reportToReportDto(reportRepository.save(
                         Report.builder()
-                                .expiredAt(LocalDateTime.now().plusMinutes(reportConfig.getInitTrafficTtl()))
-                                .type(ReportType.TRAFFIC)
-                                .isAccept(false)
+                                .expiredAt(LocalDateTime.now().plusMinutes(reportConfig.getInitPoliceTtl()))
+                                .type(ReportType.POLICE)
+                                .isAccept(true)
                                 .user(user)
                                 .likeCount(0)
                                 .location(reportDto.getLocation())
@@ -68,7 +68,7 @@ public class TrafficReportService implements ReportInterface {
 
     @Override
     public List<ReportDto> getAll() {
-        return reportRepository.findAllByType(ReportType.TRAFFIC)
+        return reportRepository.findAllByType(ReportType.POLICE)
                 .stream()
                 .map(ReportMapper.INSTANCE::reportToReportDto)
                 .toList();
@@ -79,7 +79,7 @@ public class TrafficReportService implements ReportInterface {
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         report.setLikeCount(report.getLikeCount() + 1);
-        report.setExpiredAt(LocalDateTime.now().plusMinutes(reportConfig.getLikeTrafficTtl()));
+        report.setExpiredAt(LocalDateTime.now().plusMinutes(reportConfig.getLikePoliceTtl()));
         return ReportMapper.INSTANCE.reportToReportDto(reportRepository.save(report));
     }
 
@@ -88,7 +88,7 @@ public class TrafficReportService implements ReportInterface {
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         report.setLikeCount(report.getLikeCount() - 1);
-        report.setExpiredAt(report.getExpiredAt().minusMinutes(reportConfig.getDisLikeTrafficTtl()));
+        report.setExpiredAt(report.getExpiredAt().minusMinutes(reportConfig.getDisLikePoliceTtl()));
         return ReportMapper.INSTANCE.reportToReportDto(reportRepository.save(report));
     }
 
@@ -97,7 +97,7 @@ public class TrafficReportService implements ReportInterface {
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         report.setIsAccept(true);
-        report.setExpiredAt(LocalDateTime.now().plusMinutes(reportConfig.getInitTrafficTtl()));
+        report.setExpiredAt(LocalDateTime.now().plusMinutes(reportConfig.getInitPoliceTtl()));
         return ReportMapper.INSTANCE.reportToReportDto(reportRepository.save(report));
     }
 }
