@@ -57,6 +57,22 @@ public class User implements UserDetails {
             fetch = FetchType.EAGER
     )
     @JsonIgnore
+    List<AccidentReport> accidentReports;
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            mappedBy = "user",
+            fetch = FetchType.EAGER
+    )
+    @JsonIgnore
+    List<PoliceReport> policeReports;
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            mappedBy = "user",
+            fetch = FetchType.EAGER
+    )
+    @JsonIgnore
     List<Route> routes;
 
     @Override

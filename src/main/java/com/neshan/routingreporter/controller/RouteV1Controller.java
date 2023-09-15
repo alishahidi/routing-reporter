@@ -2,15 +2,13 @@ package com.neshan.routingreporter.controller;
 
 import com.neshan.routingreporter.dto.RouteDto;
 import com.neshan.routingreporter.dto.RouteReportsDto;
+import com.neshan.routingreporter.repository.TrafficReportRepository;
 import com.neshan.routingreporter.service.RouteService;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,6 +18,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RouteV1Controller {
     RouteService routeService;
+    TrafficReportRepository trafficReportRepository;
 
     @GetMapping("/reports")
     @Transactional

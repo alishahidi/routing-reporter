@@ -3,11 +3,15 @@ package com.neshan.routingreporter.service;
 import com.neshan.routingreporter.dto.RouteDto;
 import com.neshan.routingreporter.dto.RouteReportsDto;
 import com.neshan.routingreporter.enums.ReportType;
+import com.neshan.routingreporter.mapper.AccidentReportMapper;
+import com.neshan.routingreporter.mapper.PoliceReportMapper;
 import com.neshan.routingreporter.mapper.RouteMapper;
 import com.neshan.routingreporter.mapper.TrafficReportMapper;
 import com.neshan.routingreporter.model.Route;
 import com.neshan.routingreporter.model.TrafficReport;
 import com.neshan.routingreporter.model.User;
+import com.neshan.routingreporter.repository.AccidentReportRepository;
+import com.neshan.routingreporter.repository.PoliceReportRepository;
 import com.neshan.routingreporter.repository.RouteRepository;
 import com.neshan.routingreporter.repository.TrafficReportRepository;
 import lombok.AccessLevel;
@@ -27,12 +31,24 @@ import java.util.stream.Collectors;
 public class RouteService {
     RouteRepository routeRepository;
     TrafficReportRepository trafficReportRepository;
+    AccidentReportRepository accidentReportRepository;
+    PoliceReportRepository policeReportRepository;
 
     public RouteReportsDto getAllReportAroundRoute(RouteDto routeDto) {
         return RouteReportsDto.builder()
-                .trafficReports(trafficReportRepository.findReportsWithinRouteRadius(routeDto.getRoute())
-                        .stream ()
+                .traffic(trafficReportRepository.findReportsWithinRouteRadius(routeDto.getRoute())
+                        .stream()
                         .map(TrafficReportMapper.INSTANCE::trafficReportToTrafficReportDto)
+                        .toList()
+                )
+                .accident(accidentReportRepository.findReportsWithinRouteRadius(routeDto.getRoute())
+                        .stream()
+                        .map(AccidentReportMapper.INSTANCE::accidentReportToAccidentReportDto)
+                        .toList()
+                )
+                .police(policeReportRepository.findReportsWithinRouteRadius(routeDto.getRoute())
+                        .stream()
+                        .map(PoliceReportMapper.INSTANCE::policeReportToPoliceReportDto)
                         .toList()
                 )
                 .build();

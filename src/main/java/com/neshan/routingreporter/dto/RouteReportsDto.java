@@ -12,5 +12,8 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RouteReportsDto {
-    List<TrafficReportDto> trafficReports;
+    List<TrafficReportDto> traffic;
+    List<AccidentReportDto> accident;
+    List<PoliceReportDto> police;
+
 }

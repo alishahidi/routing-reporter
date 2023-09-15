@@ -94,4 +94,8 @@ public class TrafficReportService {
         report.setExpiredAt(LocalDateTime.now().plusMinutes(reportConfig.getInitTrafficTtl()));
         return TrafficReportMapper.INSTANCE.trafficReportToTrafficReportDto(trafficReportRepository.save(report));
     }
+
+    public List<Integer> findTopTrafficHours(Integer limit) {
+        return trafficReportRepository.findTopTrafficHours(limit);
+    }
 }
