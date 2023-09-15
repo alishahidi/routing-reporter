@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.locationtech.jts.geom.Point;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -19,6 +20,7 @@ public class ReportDto {
     Boolean isAccept;
     Point location;
     Integer likeCount;
+    LocalDateTime expiredAt;
     Date createdAt;
     Date updatedAt;
 

@@ -24,7 +24,7 @@ public class ReportService {
     public ReportDto createReport(ReportDto reportDto) {
         ReportInterface report = reportFactory.makeReport(reportDto.getType());
 
-        return report.createReport(reportDto);
+        return report.create(reportDto);
     }
 
     public List<ReportDto> getAllReportAroundRoute(RouteDto routeDto) {

@@ -25,7 +25,7 @@ public class OperatorV1Controller {
         if (type == null) {
             return reportService.getAllReport();
         }
-        return reportFactory.makeReport(ReportType.valueOf(type.toUpperCase())).getAllReport();
+        return reportFactory.makeReport(ReportType.valueOf(type.toUpperCase())).getAll();
     }
 
     @PutMapping("/report/accept/{id}")

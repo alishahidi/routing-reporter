@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface ReportRepository extends JpaRepository<Report, Long> {
-    @Query("SELECT r FROM Report r WHERE ST_DWithin(r.location, ?1, 10 * 0.00001) = true AND r.expiredAt > NOW() AND r.isAccept = true")
+    @Query("SELECT r FROM Report r WHERE ST_DWithin(r.location, ?1, 10 * 0.00001) = true AND r.likeCount > -2")
     List<Report> findReportsWithinRouteRadius(LineString route);
 
     @Query("SELECT r FROM Report r WHERE r.expiredAt > NOW()")
