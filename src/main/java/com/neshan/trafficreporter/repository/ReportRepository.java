@@ -15,5 +15,6 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     @Query("SELECT r FROM Report r WHERE r.expiredAt > NOW()")
     List<Report> findAllByType(ReportType type);
 
+    @Query("SELECT r.type FROM Report r WHERE r.id = ?1")
     ReportType findTypeById(Long id);
 }

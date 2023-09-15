@@ -3,6 +3,7 @@ package com.neshan.trafficreporter.service;
 import com.neshan.trafficreporter.component.ReportFactory;
 import com.neshan.trafficreporter.dto.ReportDto;
 import com.neshan.trafficreporter.dto.RouteDto;
+import com.neshan.trafficreporter.enums.ReportType;
 import com.neshan.trafficreporter.interfaces.ReportInterface;
 import com.neshan.trafficreporter.mapper.ReportMapper;
 import com.neshan.trafficreporter.repository.ReportRepository;
@@ -38,5 +39,9 @@ public class ReportService {
                 .stream()
                 .map(ReportMapper.INSTANCE::reportToReportDto)
                 .toList();
+    }
+
+    public ReportType getTypeById(Long id){
+        return reportRepository.findTypeById(id);
     }
 }

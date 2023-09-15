@@ -29,7 +29,7 @@ public class OperatorV1Controller {
     }
 
     @PutMapping("/report/accept/{id}")
-    public ReportDto acceptReport(@RequestBody ReportDto reportDto, @PathVariable Long id) {
-        return reportFactory.makeReport(reportDto.getType()).accept(id);
+    public ReportDto acceptReport(@PathVariable Long id) {
+        return reportFactory.makeReport(reportService.getTypeById(id)).accept(id);
     }
 }
