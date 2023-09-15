@@ -1,7 +1,7 @@
 jwt:
   token: ac7b9c76236ae1e80f181586a980d292a1a6eb14e3beeaa97d01523ef2a571b1
 
-report: # ttl in minute
+report:
   traffic:
     init:
       ttl: 5
