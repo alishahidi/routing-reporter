@@ -1,5 +1,5 @@
 jwt:
-  token: ac7b9c76236ae1e80f181586a980d292a1a6eb14e3beeaa97d01523ef2a571b1
+  token: ${JWT_TOKEN:ac7b9c76236ae1e80f181586a980d292a1a6eb14e3beeaa97d01523ef2a571b1}
 
 report:
   traffic:
@@ -25,10 +25,19 @@ report:
       ttl: 10
 
 spring:
+  cache:
+    type: redis
+    redis:
+      cache-null-values: true
+      time-to-live: 40000
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
   datasource:
-    username: postgres
-    url: jdbc:postgresql://localhost:5432/traffic
-    password: 1376gtid
+    username: ${DB_USER:postgres}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_SCHEMA:traffic}
+    password: ${DB_PASS:1376gtid}
   jpa:
     hibernate:
       ddl-auto: update

@@ -1,0 +1,41 @@
+version: latest
+
+services:
+  postgres:
+    container_name: routing-postgres
+    image: postgis/postgis:15-3.4-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 1376gtid
+    volumes:
+      - postgres:/var/lib/postgresql/data
+  redis:
+    container_name: routing-redis
+    image: redis:7.0.13-alpine
+    restart: always
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - redis:/data
+  api:
+    container_name: routing-api
+    depends_on:
+      - postgres
+      - redis
+    build: ./
+    ports:
+      - 8080:8080
+    environment:
+      - JWT_TOKEN=ac7b9c76236ae1e80f181586a980d292a1a6eb14e3beeaa97d01523ef2a571b1
+      - REDIS_HOST=routing-redis
+      - REDIS_PORT=6379
+      - DB_HOST=routing-postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASS=1376gtid
+      - DB_SCHEMA=traffic
+
+volumes:
+  redis:
+    driver: local
+  postgres:
+    driver: local
