@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.neshan</groupId>
     <artifactId>routing-reporter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>routing-reporter</name>
     <description>routing-reporter</description>
     <properties>
