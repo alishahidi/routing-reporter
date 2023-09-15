@@ -13,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 import org.locationtech.jts.geom.Point;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,15 @@ public class TrafficReportService implements ReportInterface {
     ReportRepository reportRepository;
     RedissonClient redissonClient;
 
+    @Value("${report.traffic.init.ttl}")
+    public static Integer initTrafficTtl;
+
+    @Value("${report.traffic.like.ttl}")
+    public static Integer likeTrafficTtl;
+
+    @Value("${report.traffic.dis-like.ttl}")
+    public static Integer disLikeTrafficTtl;
+
     @Override
     public ReportDto create(ReportDto reportDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -42,6 +52,9 @@ public class TrafficReportService implements ReportInterface {
         try {
             boolean isLocked = lock.tryLock(40, TimeUnit.SECONDS);
             if (isLocked) {
+                if (reportRepository.findReportByLocationAndExpiredAt(point) != null) {
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Duplicated request.");
+                }
                 return ReportMapper.INSTANCE.reportToReportDto(reportRepository.save(
                         Report.builder()
                                 .expiredAt(null)
@@ -75,7 +88,7 @@ public class TrafficReportService implements ReportInterface {
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         report.setLikeCount(report.getLikeCount() + 1);
-        report.setExpiredAt(LocalDateTime.now().plusMinutes(2));
+        report.setExpiredAt(LocalDateTime.now().plusMinutes(likeTrafficTtl));
         return ReportMapper.INSTANCE.reportToReportDto(reportRepository.save(report));
     }
 
@@ -84,7 +97,7 @@ public class TrafficReportService implements ReportInterface {
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         report.setLikeCount(report.getLikeCount() - 1);
-        report.setExpiredAt(report.getExpiredAt().minusMinutes(1));
+        report.setExpiredAt(report.getExpiredAt().minusMinutes(disLikeTrafficTtl));
         return ReportMapper.INSTANCE.reportToReportDto(reportRepository.save(report));
     }
 
@@ -93,7 +106,7 @@ public class TrafficReportService implements ReportInterface {
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         report.setIsAccept(true);
-        report.setExpiredAt(LocalDateTime.now().plusMinutes(2));
+        report.setExpiredAt(LocalDateTime.now().plusMinutes(initTrafficTtl));
         return ReportMapper.INSTANCE.reportToReportDto(reportRepository.save(report));
     }
 }

@@ -1,6 +1,29 @@
 jwt:
   token: ac7b9c76236ae1e80f181586a980d292a1a6eb14e3beeaa97d01523ef2a571b1
 
+report: # ttl in minute
+  traffic:
+    init:
+      ttl: 5
+    like:
+      ttl: 5
+    dis-like:
+      ttl: 1
+  accident:
+    init:
+      ttl: 10
+    like:
+      ttl: 10
+    dis-like:
+      ttl: 5
+  police:
+    init:
+      ttl: 20
+    like:
+      ttl: 20
+    dis-like:
+      ttl: 10
+
 spring:
   datasource:
     username: postgres
