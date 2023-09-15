@@ -91,13 +91,4 @@ public class PoliceReportService implements ReportInterface {
         report.setExpiredAt(report.getExpiredAt().minusMinutes(reportConfig.getDisLikePoliceTtl()));
         return ReportMapper.INSTANCE.reportToReportDto(reportRepository.save(report));
     }
-
-    @Override
-    public ReportDto accept(Long id) {
-        Report report = reportRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        report.setIsAccept(true);
-        report.setExpiredAt(LocalDateTime.now().plusMinutes(reportConfig.getInitPoliceTtl()));
-        return ReportMapper.INSTANCE.reportToReportDto(reportRepository.save(report));
-    }
 }
