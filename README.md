@@ -131,7 +131,7 @@ mvn spring-boot:run
 <!-- TOC --><a name="register-user"></a>
 ### Register user
 
-```http
+```text
   POST /api/v1/auth/regsiter
 ```
 
@@ -164,7 +164,7 @@ curl --location --request POST '{host}/api/v1/auth/register' \
 <!-- TOC --><a name="login-user"></a>
 ### Login user
 
-```http
+```text
   POST /api/v1/auth/login
 ```
 
@@ -195,7 +195,7 @@ curl --location --request POST '{host}/api/v1/auth/login' \
 <!-- TOC --><a name="get-user"></a>
 ### Get user
 
-```http
+```text
   GET /api/v1/auth
 
   Headers:
@@ -206,14 +206,13 @@ curl --location --request POST '{host}/api/v1/auth/login' \
 #### Curl
 ```bash
 curl --location '{host}/api/v1/auth' \
---header 'Content-Type: application/json' \
 --header 'Authorization: Bearer {auth_key}'
 ```
 
 <!-- TOC --><a name="create-report"></a>
 ### Create report
 
-```http
+```text
   POST /api/v1/report
 
   Headers:
@@ -264,7 +263,7 @@ curl --location --request POST '{host}api/v1/report' \
 <!-- TOC --><a name="like-report"></a>
 ### Like report
 
-```http
+```text
   PUT /api/v1/report/like/{id}
 
   Headers:
@@ -279,14 +278,14 @@ curl --location --request POST '{host}api/v1/report' \
 <!-- TOC --><a name="curl-4"></a>
 #### Curl
 ```bash
-curl --location --request PUT '{host}/api/v1/like/{id}' \
+curl --location --request PUT '{host}/api/v1/report/like/{id}' \
 --header 'Authorization: Bearer {auth_key}'
 ```
 
 <!-- TOC --><a name="dislike-report"></a>
 ### Dislike report
 
-```http
+```text
   PUT /api/v1/report/dislike/{id}
 
   Headers:
@@ -302,14 +301,14 @@ curl --location --request PUT '{host}/api/v1/like/{id}' \
 <!-- TOC --><a name="curl-5"></a>
 #### Curl
 ```bash
-curl --location --request PUT '{host}/api/v1/dislike/{id}' \
+curl --location --request PUT '{host}/api/v1/report/dislike/{id}' \
 --header 'Authorization: Bearer {auth_key}'
 ```
 
 <!-- TOC --><a name="get-top-hours"></a>
 ### Get top hours
 
-```http
+```text
   GET /api/v1/report/top/{limit}/{type}
 ```
 
@@ -327,7 +326,7 @@ curl --location '{host}/api/v1/report/top/{limit}/{type}'
 <!-- TOC --><a name="get-all-reports"></a>
 ### Get all reports
 
-```http
+```text
   GET /api/v1/operator/report/get
 
   Headers:
@@ -344,7 +343,7 @@ curl --location '{host}/api/v1/operator/report/get' \
 <!-- TOC --><a name="get-all-reports-by-type"></a>
 ### Get all reports by type
 
-```http
+```text
   GET /api/v1/operator/report/get?type=<type>
 
   Headers:
@@ -365,7 +364,7 @@ curl --location '{host}/api/v1/operator/report/get?type={type}' \
 <!-- TOC --><a name="accept-report"></a>
 ### Accept report
 
-```http
+```text
   PUT /api/v1/operator/report/accept/{id}
 
   Headers:
@@ -385,7 +384,7 @@ curl --location --request PUT '{host}/api/v1/report/accept/{id}' \
 
 <!-- TOC --><a name="get-around-route-reports"></a>
 ### Get around route reports
-```http
+```text
   PUT /api/v1/route/reports
 
   Headers:
