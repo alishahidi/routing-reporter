@@ -1,4 +1,48 @@
+<!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
 
+- [Routing reporter](#routing-reporter)
+    * [Configuration](#configuration)
+        + [TTLs](#ttls)
+            - [Init ttl](#init-ttl)
+            - [Like ttl](#like-ttl)
+            - [DisLike ttl](#dislike-ttl)
+    * [Environment Variables](#environment-variables)
+    * [Getting start](#getting-start)
+        + [Docker](#docker)
+        + [Maven](#maven)
+    * [API Reference (v1)](#api-reference-v1)
+        + [Register user](#register-user)
+            - [Request body](#request-body)
+            - [Curl](#curl)
+        + [Login user](#login-user)
+            - [Request body](#request-body-1)
+            - [Curl](#curl-1)
+        + [Get user](#get-user)
+            - [Curl](#curl-2)
+        + [Create report](#create-report)
+            - [Request body](#request-body-2)
+            - [Curl](#curl-3)
+        + [Like report](#like-report)
+            - [Curl](#curl-4)
+        + [Dislike report](#dislike-report)
+            - [Curl](#curl-5)
+        + [Get top hours](#get-top-hours)
+            - [Curl](#curl-6)
+        + [Get all reports](#get-all-reports)
+            - [Curl](#curl-7)
+        + [Get all reports by type](#get-all-reports-by-type)
+            - [Curl](#curl-8)
+        + [Accept report](#accept-report)
+            - [Curl](#curl-9)
+        + [Get around route reports](#get-around-route-reports)
+            - [Request body](#request-body-3)
+            - [Curl](#curl-10)
+    * [Authors](#authors)
+
+<!-- TOC end -->
+
+
+<!-- TOC --><a name="routing-reporter"></a>
 # Routing reporter
 
 create, manager and get reports around route
@@ -7,21 +51,26 @@ create, manager and get reports around route
 ![Logo](https://raw.githubusercontent.com/neshan-camp-alishahidi/routing-reporter/main/src/main/resources/logo.jpeg?token=GHSAT0AAAAAACFYD4ZKXLCZPX7EYL75524GZIFMEGQ)
 
 
+<!-- TOC --><a name="configuration"></a>
 ## Configuration
 project have some configuration you can set in `application.yaml` file
 
+<!-- TOC --><a name="ttls"></a>
 ### TTLs
 we have some ttl config for report
 
+<!-- TOC --><a name="init-ttl"></a>
 #### Init ttl
 for example `report.traffic.init.ttl` its set as report ttl when traffic report created or accepted
 
+<!-- TOC --><a name="like-ttl"></a>
 #### Like ttl
 `report.traffic.like.ttl` its set when report liked
 
 **Note**: ttl for the like section is calculated from the time of liking and is not added to the previous value
 
 
+<!-- TOC --><a name="dislike-ttl"></a>
 #### DisLike ttl
 `report.traffic.dislike.ttl` its increase from previous value when report disliked
 
@@ -37,6 +86,7 @@ report:
 ```
 
 
+<!-- TOC --><a name="environment-variables"></a>
 ## Environment Variables
 
 To change project defaut settings, you will need sett the following environment variables to your system or docker-compose file
@@ -49,8 +99,10 @@ To change project defaut settings, you will need sett the following environment 
 
 
 
+<!-- TOC --><a name="getting-start"></a>
 ## Getting start
 
+<!-- TOC --><a name="docker"></a>
 ### Docker
 if you want use docker for start project you can simple run it with
 
@@ -68,6 +120,7 @@ and second:
 docker compose build --no-cache
 ```
 
+<!-- TOC --><a name="maven"></a>
 ### Maven
 if you dont want use docker please make sure reddis and postgres is run and start project with:
 
@@ -76,8 +129,10 @@ mvn spring-boot:run
 ```
 
 
+<!-- TOC --><a name="api-reference-v1"></a>
 ## API Reference (v1)
 
+<!-- TOC --><a name="register-user"></a>
 ### Register user
 
 ```http
@@ -88,6 +143,7 @@ mvn spring-boot:run
 | :-------- | :------- | :------------------------- |
 | `body` | `object` | **Required**. object containing user. |
 
+<!-- TOC --><a name="request-body"></a>
 #### Request body
 ```json
 {
@@ -97,6 +153,7 @@ mvn spring-boot:run
 }
 ```
 
+<!-- TOC --><a name="curl"></a>
 #### Curl
 ```bash
 curl --location --request POST '{host}/api/v1/auth/register' \
@@ -108,6 +165,7 @@ curl --location --request POST '{host}/api/v1/auth/register' \
 }'
 ```
 
+<!-- TOC --><a name="login-user"></a>
 ### Login user
 
 ```http
@@ -118,6 +176,7 @@ curl --location --request POST '{host}/api/v1/auth/register' \
 | :-------- | :------- | :------------------------- |
 | `body` | `object` | **Required**. object containing user. |
 
+<!-- TOC --><a name="request-body-1"></a>
 #### Request body
 ```json
 {
@@ -126,6 +185,7 @@ curl --location --request POST '{host}/api/v1/auth/register' \
 }
 ```
 
+<!-- TOC --><a name="curl-1"></a>
 #### Curl
 ```bash
 curl --location --request POST '{host}/api/v1/auth/login' \
@@ -136,6 +196,7 @@ curl --location --request POST '{host}/api/v1/auth/login' \
 }'
 ```
 
+<!-- TOC --><a name="get-user"></a>
 ### Get user
 
 ```http
@@ -145,6 +206,7 @@ curl --location --request POST '{host}/api/v1/auth/login' \
   Authorization: Bearer YOUR_ACCESS_TOKEN
 ```
 
+<!-- TOC --><a name="curl-2"></a>
 #### Curl
 ```bash
 curl --location '{host}/api/v1/auth' \
@@ -152,6 +214,7 @@ curl --location '{host}/api/v1/auth' \
 --header 'Authorization: Bearer {auth_key}'
 ```
 
+<!-- TOC --><a name="create-report"></a>
 ### Create report
 
 ```http
@@ -165,6 +228,7 @@ curl --location '{host}/api/v1/auth' \
 | :-------- | :------- | :------------------------- |
 | `body` | `object` | **Required**. object containing report and report type.| 
 
+<!-- TOC --><a name="request-body-2"></a>
 #### Request body
 ```json
 {
@@ -181,6 +245,7 @@ curl --location '{host}/api/v1/auth' \
 }
 ```
 
+<!-- TOC --><a name="curl-3"></a>
 #### Curl
 ```bash
 curl --location --request POST '{host}api/v1/report' \
@@ -200,6 +265,7 @@ curl --location --request POST '{host}api/v1/report' \
 }'
 ```
 
+<!-- TOC --><a name="like-report"></a>
 ### Like report
 
 ```http
@@ -214,12 +280,14 @@ curl --location --request POST '{host}api/v1/report' \
 | :-------- | :------- | :------------------------- |
 | `id` | `integer` | **Required**. report id.       |
 
+<!-- TOC --><a name="curl-4"></a>
 #### Curl
 ```bash
 curl --location --request PUT '{host}/api/v1/like/{id}' \
 --header 'Authorization: Bearer {auth_key}'
 ```
 
+<!-- TOC --><a name="dislike-report"></a>
 ### Dislike report
 
 ```http
@@ -235,12 +303,14 @@ curl --location --request PUT '{host}/api/v1/like/{id}' \
 | `id` | `integer` | **Required**. report id.       |
 
 
+<!-- TOC --><a name="curl-5"></a>
 #### Curl
 ```bash
 curl --location --request PUT '{host}/api/v1/dislike/{id}' \
 --header 'Authorization: Bearer {auth_key}'
 ```
 
+<!-- TOC --><a name="get-top-hours"></a>
 ### Get top hours
 
 ```http
@@ -252,11 +322,13 @@ curl --location --request PUT '{host}/api/v1/dislike/{id}' \
 | `limit` | `integer` | **Required**. limit of hours count.       |
 | `type` | `string` | **Required**. report type.       |
 
+<!-- TOC --><a name="curl-6"></a>
 #### Curl
 ```bash
 curl --location '{host}/api/v1/report/top/{limit}/{type}'
 ```
 
+<!-- TOC --><a name="get-all-reports"></a>
 ### Get all reports
 
 ```http
@@ -266,12 +338,14 @@ curl --location '{host}/api/v1/report/top/{limit}/{type}'
   Authorization: Bearer YOUR_ACCESS_TOKEN
 ```
 
+<!-- TOC --><a name="curl-7"></a>
 #### Curl
 ```bash
 curl --location '{host}/api/v1/operator/report/get' \
 --header 'Authorization: Bearer {auth_key}'
 ```
 
+<!-- TOC --><a name="get-all-reports-by-type"></a>
 ### Get all reports by type
 
 ```http
@@ -285,12 +359,14 @@ curl --location '{host}/api/v1/operator/report/get' \
 | :-------- | :------- | :------------------------- |
 | `type` | `param` | **Optional**. type of report.       |
 
+<!-- TOC --><a name="curl-8"></a>
 #### Curl
 ```bash
 curl --location '{host}/api/v1/operator/report/get?type={type}' \
 --header 'Authorization: Bearer {auth_key}'
 ```
 
+<!-- TOC --><a name="accept-report"></a>
 ### Accept report
 
 ```http
@@ -304,12 +380,14 @@ curl --location '{host}/api/v1/operator/report/get?type={type}' \
 | :-------- | :------- | :------------------------- |
 | `id` | `integer` | **Required**. id of report.       |
 
+<!-- TOC --><a name="curl-9"></a>
 #### Curl
 ```bash
 curl --location --request PUT '{host}/api/v1/report/accept/{id}' \
 --header 'Authorization: Bearer {auth_key}'
 ```
 
+<!-- TOC --><a name="get-around-route-reports"></a>
 ### Get around route reports
 ```http
   PUT /api/v1/route/reports
@@ -323,6 +401,7 @@ curl --location --request PUT '{host}/api/v1/report/accept/{id}' \
 | `body` | `object` | **Required**. object containing route.       |
 
 
+<!-- TOC --><a name="request-body-3"></a>
 #### Request body
 ```json
 {
@@ -342,6 +421,7 @@ curl --location --request PUT '{host}/api/v1/report/accept/{id}' \
 }
 ```
 
+<!-- TOC --><a name="curl-10"></a>
 #### Curl
 ```bash
 curl --location --request PUT '{host}/api/v1/route/reports' \
@@ -364,6 +444,7 @@ curl --location --request PUT '{host}/api/v1/route/reports' \
 ```
 
 
+<!-- TOC --><a name="authors"></a>
 ## Authors
 
 - [@alishahidi](https://www.github.com/alishahidi)
