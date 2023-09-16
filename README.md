@@ -2,9 +2,7 @@
 # Routing reporter
 create, manager and get reports around route
 
-<div style="text-align:center;">
-  <img src="https://assets-global.website-files.com/6050a76fa6a633d5d54ae714/609147088669907f652110b0_report-an-issue(about-maps).jpeg" alt="Logo" width="200" height="200" />
-</div>
+![Logo](https://assets-global.website-files.com/6050a76fa6a633d5d54ae714/609147088669907f652110b0_report-an-issue(about-maps).jpeg)
 
 <!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
 
