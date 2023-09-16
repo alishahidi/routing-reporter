@@ -37,7 +37,10 @@ public class Report {
     @JsonIgnore
     User user;
 
+    @Enumerated(EnumType.STRING)
     ReportType type;
+
+    Boolean isAccept;
 
     @Column(columnDefinition = "geometry(Point,3857)")
     Point location;

@@ -1,5 +1,6 @@
 package com.neshan.routingreporter.dto;
 
+import com.neshan.routingreporter.enums.AccidentType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
@@ -11,6 +12,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AccidentReportDto extends ReportDto {
-    String someValue;
+    AccidentType accidentType;
 
 }

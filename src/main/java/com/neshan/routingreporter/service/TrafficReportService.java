@@ -4,7 +4,6 @@ import com.neshan.routingreporter.config.ReportConfig;
 import com.neshan.routingreporter.dto.ReportDto;
 import com.neshan.routingreporter.enums.ReportType;
 import com.neshan.routingreporter.interfaces.ReportInterface;
-import com.neshan.routingreporter.mapper.ReportMapper;
 import com.neshan.routingreporter.mapper.TrafficReportMapper;
 import com.neshan.routingreporter.model.TrafficReport;
 import com.neshan.routingreporter.model.User;
@@ -50,12 +49,13 @@ public class TrafficReportService implements ReportInterface {
                 if (trafficReportRepository.existsTrafficReportByLocationAndExpiredAt(point)) {
                     throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Duplicated request.");
                 }
-                return ReportMapper.INSTANCE.toReportDto(
+                return TrafficReportMapper.INSTANCE.trafficReportToTrafficReportDto(
                         trafficReportRepository.save(
                                 TrafficReport.builder()
                                         .expiredAt(LocalDateTime.now().plusMinutes(reportConfig.getInitTrafficTtl()))
                                         .isAccept(false)
                                         .type(ReportType.TRAFFIC)
+                                        .trafficType(request.getTrafficType())
                                         .user(user)
                                         .likeCount(0)
                                         .location(reportDto.getLocation())
