@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface AuthenticationMapper {
     AuthenticationMapper INSTANCE = Mappers.getMapper(AuthenticationMapper.class);
 

@@ -3,8 +3,10 @@ package com.neshan.routingreporter.service;
 import com.neshan.routingreporter.dto.AuthenticationDto;
 import com.neshan.routingreporter.dto.UserDto;
 import com.neshan.routingreporter.enums.Role;
-import com.neshan.routingreporter.mapper.AuthenticationMapper;
-import com.neshan.routingreporter.mapper.UserMapper;
+import com.neshan.routingreporter.mapper.*;
+import com.neshan.routingreporter.model.AccidentReport;
+import com.neshan.routingreporter.model.PoliceReport;
+import com.neshan.routingreporter.model.TrafficReport;
 import com.neshan.routingreporter.model.User;
 import com.neshan.routingreporter.repository.UserRepository;
 import com.neshan.routingreporter.request.AuthenticationRequest;
@@ -19,15 +21,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationService {
-
     PasswordEncoder passwordEncoder;
     JwtService jwtService;
     AuthenticationManager authenticationManager;
     UserRepository userRepository;
+    ReportService reportService;
 
     public AuthenticationDto register(RegisterRequest request) {
         User user = User
@@ -61,6 +66,20 @@ public class AuthenticationService {
     public UserDto get() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return UserMapper.INSTANCE.userToUserDTO(user);
+        return UserDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .username(user.getUsername())
+                .role(user.getRole())
+                .reports(user.getReports()
+                        .stream()
+                        .map(reportService::mapToMapper)
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList())
+                )
+                .routes(user.getRoutes().stream().map(RouteMapper.INSTANCE::routeToRouteDto).toList())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
+                .build();
     }
 }

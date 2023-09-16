@@ -15,10 +15,11 @@ import org.mapstruct.factory.Mappers;
 public interface ReportMapper {
     ReportMapper INSTANCE = Mappers.getMapper(ReportMapper.class);
 
-    AccidentReportDto toAccidentReportDto(AccidentReport report);
-    AccidentReport toAccidentReport(AccidentReportDto dto);
     ReportDto toReportDto(Report report);
-    Report toReport(ReportDto dto);
+
+    default AccidentReportDto accidentReportToAccidentReportDto(AccidentReport report) {
+        return Mappers.getMapper(AccidentReportMapper.class).accidentReportToAccidentReportDto(report);
+    }
 
     default TrafficReportDto trafficReportToTrafficReportDto(TrafficReport report) {
         return Mappers.getMapper(TrafficReportMapper.class).trafficReportToTrafficReportDto(report);

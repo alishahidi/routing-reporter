@@ -5,7 +5,7 @@ import com.neshan.routingreporter.model.TrafficReport;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface TrafficReportMapper {
     TrafficReportMapper INSTANCE = Mappers.getMapper(TrafficReportMapper.class);
 

@@ -28,19 +28,20 @@ public class ReportService {
 
     public List<ReportDto> getAll() {
         return reportRepository.findAll().stream()
-                .map(report -> {
-                    if (report instanceof TrafficReport) {
-                        return TrafficReportMapper.INSTANCE.trafficReportToTrafficReportDto((TrafficReport) report);
-                    } else if (report instanceof AccidentReport) {
-                        return AccidentReportMapper.INSTANCE.accidentReportToAccidentReportDto((AccidentReport) report);
-                    } else if (report instanceof PoliceReport) {
-                        return PoliceReportMapper.INSTANCE.policeReportToPoliceReportDto((PoliceReport) report);
-                    } else {
-                        return null;
-                    }
-                })
+                .map(this::mapToMapper)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+    }
+
+    public ReportDto mapToMapper(Report report) {
+        if (report instanceof TrafficReport) {
+            return TrafficReportMapper.INSTANCE.trafficReportToTrafficReportDto((TrafficReport) report);
+        } else if (report instanceof AccidentReport) {
+            return AccidentReportMapper.INSTANCE.accidentReportToAccidentReportDto((AccidentReport) report);
+        } else if (report instanceof PoliceReport) {
+            return PoliceReportMapper.INSTANCE.policeReportToPoliceReportDto((PoliceReport) report);
+        }
+        return null;
     }
 
     public Report getById(Long id) {
