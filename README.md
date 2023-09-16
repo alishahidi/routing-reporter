@@ -161,6 +161,7 @@ curl --location --request POST '{host}/api/v1/auth/register' \
 }'
 ```
 
+---
 <!-- TOC --><a name="login-user"></a>
 ### Login user
 
@@ -192,6 +193,7 @@ curl --location --request POST '{host}/api/v1/auth/login' \
 }'
 ```
 
+---
 <!-- TOC --><a name="get-user"></a>
 ### Get user
 
@@ -209,6 +211,7 @@ curl --location '{host}/api/v1/auth' \
 --header 'Authorization: Bearer {auth_key}'
 ```
 
+---
 <!-- TOC --><a name="create-report"></a>
 ### Create report
 
@@ -260,6 +263,7 @@ curl --location --request POST '{host}api/v1/report' \
 }'
 ```
 
+---
 <!-- TOC --><a name="like-report"></a>
 ### Like report
 
@@ -282,6 +286,7 @@ curl --location --request PUT '{host}/api/v1/report/like/{id}' \
 --header 'Authorization: Bearer {auth_key}'
 ```
 
+---
 <!-- TOC --><a name="dislike-report"></a>
 ### Dislike report
 
@@ -305,6 +310,7 @@ curl --location --request PUT '{host}/api/v1/report/dislike/{id}' \
 --header 'Authorization: Bearer {auth_key}'
 ```
 
+---
 <!-- TOC --><a name="get-top-hours"></a>
 ### Get top hours
 
@@ -323,6 +329,7 @@ curl --location --request PUT '{host}/api/v1/report/dislike/{id}' \
 curl --location '{host}/api/v1/report/top/{limit}/{type}'
 ```
 
+---
 <!-- TOC --><a name="get-all-reports"></a>
 ### Get all reports
 
@@ -340,6 +347,7 @@ curl --location '{host}/api/v1/operator/report/get' \
 --header 'Authorization: Bearer {auth_key}'
 ```
 
+---
 <!-- TOC --><a name="get-all-reports-by-type"></a>
 ### Get all reports by type
 
@@ -361,6 +369,7 @@ curl --location '{host}/api/v1/operator/report/get?type={type}' \
 --header 'Authorization: Bearer {auth_key}'
 ```
 
+---
 <!-- TOC --><a name="accept-report"></a>
 ### Accept report
 
@@ -382,6 +391,7 @@ curl --location --request PUT '{host}/api/v1/report/accept/{id}' \
 --header 'Authorization: Bearer {auth_key}'
 ```
 
+---
 <!-- TOC --><a name="get-around-route-reports"></a>
 ### Get around route reports
 ```text
@@ -438,6 +448,7 @@ curl --location --request PUT '{host}/api/v1/route/reports' \
 }'
 ```
 
+---
 
 <!-- TOC --><a name="authors"></a>
 ## Authors
