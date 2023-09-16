@@ -1,0 +1,47 @@
+jwt:
+  token: ac7b9c76236ae1e80f181586a980d292a1a6eb14e3beeaa97d01523ef2a571b1
+
+report:
+  traffic:
+    init:
+      ttl: 5
+    like:
+      ttl: 5
+    dis-like:
+      ttl: 1
+  accident:
+    init:
+      ttl: 10
+    like:
+      ttl: 10
+    dis-like:
+      ttl: 5
+  police:
+    init:
+      ttl: 20
+    like:
+      ttl: 20
+    dis-like:
+      ttl: 10
+
+spring:
+  cache:
+    type: redis
+    redis:
+      cache-null-values: true
+      time-to-live: 40000
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  datasource:
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/traffic_test
+    password: 1376gtid
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: 'false'
+server:
+  error:
+    include-message: always
