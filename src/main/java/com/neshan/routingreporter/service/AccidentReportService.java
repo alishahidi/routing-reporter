@@ -1,12 +1,10 @@
 package com.neshan.routingreporter.service;
 
 import com.neshan.routingreporter.config.ReportConfig;
-import com.neshan.routingreporter.dto.AccidentReportDto;
 import com.neshan.routingreporter.dto.ReportDto;
 import com.neshan.routingreporter.enums.ReportType;
 import com.neshan.routingreporter.interfaces.ReportInterface;
 import com.neshan.routingreporter.mapper.AccidentReportMapper;
-import com.neshan.routingreporter.mapper.ReportMapper;
 import com.neshan.routingreporter.model.AccidentReport;
 import com.neshan.routingreporter.model.User;
 import com.neshan.routingreporter.repository.AccidentReportRepository;
@@ -51,22 +49,15 @@ public class AccidentReportService implements ReportInterface {
                 if (accidentReportRepository.existsAccidentReportByLocationAndExpiredAt(point)) {
                     throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Duplicated request.");
                 }
-                AccidentReport accidentReport = AccidentReport.builder()
-                        .expiredAt(LocalDateTime.now().plusMinutes(reportConfig.getInitAccidentTtl()))
-                        .user(user)
-                        .likeCount(0)
-                        .someValue(reportDto.getSomeValue())
-                        .location(reportDto.getLocation())
-                        .build();
-                System.out.println(accidentReport.getSomeValue());
                 return AccidentReportMapper.INSTANCE.accidentReportToAccidentReportDto(
                         accidentReportRepository.save(
                                 AccidentReport.builder()
                                         .expiredAt(LocalDateTime.now().plusMinutes(reportConfig.getInitAccidentTtl()))
                                         .user(user)
                                         .likeCount(0)
+                                        .isAccept(true)
+                                        .accidentType(request.getAccidentType())
                                         .type(ReportType.ACCIDENT)
-                                        .someValue(reportDto.getSomeValue())
                                         .location(reportDto.getLocation())
                                         .build()
                         )

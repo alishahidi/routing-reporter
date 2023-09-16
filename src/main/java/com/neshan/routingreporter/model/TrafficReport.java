@@ -1,6 +1,10 @@
 package com.neshan.routingreporter.model;
 
-import jakarta.persistence.*;
+import com.neshan.routingreporter.enums.TrafficType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
@@ -14,6 +18,6 @@ import lombok.experimental.SuperBuilder;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "traffic_reports")
 public class TrafficReport extends Report {
-    Boolean isAccept;
-
+    @Enumerated(EnumType.STRING)
+    TrafficType trafficType;
 }

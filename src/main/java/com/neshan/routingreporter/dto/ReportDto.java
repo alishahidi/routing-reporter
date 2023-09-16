@@ -21,7 +21,6 @@ public class ReportDto {
     ReportType type;
     Integer likeCount;
     LocalDateTime expiredAt;
-    String someValue;
     Date createdAt;
     Date updatedAt;
 

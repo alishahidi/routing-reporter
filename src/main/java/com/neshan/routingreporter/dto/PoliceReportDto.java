@@ -1,5 +1,6 @@
 package com.neshan.routingreporter.dto;
 
+import com.neshan.routingreporter.enums.PoliceType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
@@ -11,6 +12,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PoliceReportDto extends ReportDto {
-    String someValue;
+    PoliceType policeType;
 
 }
