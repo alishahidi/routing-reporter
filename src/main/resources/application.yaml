@@ -4,21 +4,21 @@ jwt:
 report:
   traffic:
     init:
-      ttl: 60 # 5
+      ttl: 5
     like:
       ttl: 5
     dis-like:
       ttl: 1
   accident:
     init:
-      ttl: 60 # 10
+      ttl: 10
     like:
       ttl: 10
     dis-like:
       ttl: 5
   police:
     init:
-      ttl: 60 # 20
+      ttl: 20
     like:
       ttl: 20
     dis-like:

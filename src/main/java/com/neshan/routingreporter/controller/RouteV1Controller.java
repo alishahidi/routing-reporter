@@ -26,9 +26,4 @@ public class RouteV1Controller {
         routeService.create(routeDto);
         return routeService.getAllReportAroundRoute(routeDto);
     }
-
-    @GetMapping
-    public List<RouteDto> getAll(){
-        return routeService.getAll();
-    }
 }
