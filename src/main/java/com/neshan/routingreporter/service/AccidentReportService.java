@@ -10,7 +10,10 @@ import com.neshan.routingreporter.request.ReportRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKTReader;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +31,14 @@ public class AccidentReportService implements ReportInterface {
     public ReportDto create(ReportRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         ReportDto reportDto = request.getReport();
-        Point point = reportDto.getLocation();
+        WKTReader wktReader = new WKTReader(new GeometryFactory());
+
+        Point point = null;
+        try {
+            point = (Point) wktReader.read(reportDto.getLocation());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
         point.setSRID(3857);
 
         AccidentReport report = AccidentReport.builder()
@@ -38,7 +48,7 @@ public class AccidentReportService implements ReportInterface {
                 .isAccept(true)
                 .accidentType(request.getAccidentType())
                 .type(ReportType.ACCIDENT)
-                .location(reportDto.getLocation())
+                .location(point)
                 .build();
 
         return reportService.create(report);

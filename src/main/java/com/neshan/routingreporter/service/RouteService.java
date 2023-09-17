@@ -11,7 +11,10 @@ import com.neshan.routingreporter.repository.RouteRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKTReader;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +30,6 @@ public class RouteService {
     ReportRepository reportRepository;
 
     public List<ReportDto> getAllReportAroundRoute(RouteDto routeDto) {
-        System.out.println(reportRepository.findReportsWithinRouteRadius(routeDto.getRoute()));
         return reportRepository.findReportsWithinRouteRadius(routeDto.getRoute())
                 .stream()
                 .map(ReportFactory::mapToMapper)
@@ -37,11 +39,17 @@ public class RouteService {
 
     public RouteDto create(RouteDto routeDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        LineString lineString = routeDto.getRoute();
+        WKTReader wktReader = new WKTReader(new GeometryFactory());
+        LineString lineString = null;
+        try {
+            lineString = (LineString) wktReader.read(routeDto.getRoute());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
         lineString.setSRID(3857);
         return RouteMapper.INSTANCE.routeToRouteDto(routeRepository.save(
                 Route.builder()
-                        .route(routeDto.getRoute())
+                        .route(lineString)
                         .user(user)
                         .build()
         ));

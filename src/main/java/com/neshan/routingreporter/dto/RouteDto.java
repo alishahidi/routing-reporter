@@ -2,7 +2,6 @@ package com.neshan.routingreporter.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.locationtech.jts.geom.LineString;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,5 +11,5 @@ import org.locationtech.jts.geom.LineString;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RouteDto {
     Long id;
-    LineString route;
+    String route;
 }

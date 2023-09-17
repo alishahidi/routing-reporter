@@ -2,7 +2,6 @@ package com.neshan.routingreporter.repository;
 
 import com.neshan.routingreporter.enums.ReportType;
 import com.neshan.routingreporter.model.Report;
-import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,12 +26,12 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
             "WHERE r.id IN (" +
             "  SELECT MIN(sub.id) " +
             "  FROM Report sub " +
-            "  WHERE ST_Intersects(sub.location, ST_Buffer(?1, 10 * 0.00001)) = true " +
+            "  WHERE ST_Intersects(sub.location, ST_Buffer(ST_GeomFromText(?1, 3857), 10 * 0.0001)) = true " +
             "  AND sub.expiredAt > NOW() " +
             "  AND sub.likeCount > -2 " +
             "  GROUP BY ST_AsText(sub.location), sub.type" +
             ")")
-    List<Report> findReportsWithinRouteRadius(LineString route);
+    List<Report> findReportsWithinRouteRadius(String route);
 
     @Query("SELECT CAST(DATE_PART('hour', r.createdAt) AS INTEGER) AS trafficHour, COUNT(r) AS trafficCount " +
             "FROM Report r " +

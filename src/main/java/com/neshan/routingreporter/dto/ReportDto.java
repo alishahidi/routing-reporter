@@ -4,7 +4,6 @@ import com.neshan.routingreporter.enums.ReportType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
-import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -17,7 +16,7 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ReportDto {
     Long id;
-    Point location;
+    String location;
     ReportType type;
     Integer likeCount;
     LocalDateTime expiredAt;
