@@ -230,16 +230,11 @@ curl --location '{host}/api/v1/auth' \
 #### Request body
 ```json
 {
-    "type": "TRAFFIC",
-    "report": {
-        "location": {
-            "coordinates": [
-                59.55950236364649,
-                36.29250312308071
-            ],
-            "type": "Point"
-        }
-    }    
+  "type": "POLICE",
+  "policeType": "HIDDEN",
+  "report": {
+    "location": "POINT (59.563914262091146 36.301465408673664)"
+  }
 }
 ```
 
@@ -250,16 +245,11 @@ curl --location --request POST '{host}api/v1/report' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer {auth_key}' \
 --data '{
-    "type": "TRAFFIC",
+    "type": "POLICE",
+    "policeType": "HIDDEN",
     "report": {
-        "location": {
-            "coordinates": [
-                59.55950236364649,
-                36.29250312308071
-            ],
-            "type": "Point"
-        }
-    }    
+        "location": "POINT (59.563914262091146 36.301465408673664)"
+    }
 }'
 ```
 
@@ -410,19 +400,7 @@ curl --location --request PUT '{host}/api/v1/report/accept/{id}' \
 #### Request body
 ```json
 {
-    "route": {         
-        "type": "LineString",
-        "coordinates": [
-          [
-            59.557710772175795,
-            36.28857021126669
-          ],
-          [
-            59.55968013271732,
-            36.292981810238715
-          ]
-        ]
-      }
+  "route": "LINESTRING (59.557710772175795 36.28857021126669, 59.55968013271732 36.292981810238715)"
 }
 ```
 
@@ -432,19 +410,7 @@ curl --location --request PUT '{host}/api/v1/report/accept/{id}' \
 curl --location --request PUT '{host}/api/v1/route/reports' \
 --header 'Authorization: Bearer {auth_key}' \
 --data '{
-    "route": {         
-        "type": "LineString",
-        "coordinates": [
-          [
-            59.557710772175795,
-            36.28857021126669
-          ],
-          [
-            59.55968013271732,
-            36.292981810238715
-          ]
-        ]
-      }
+    "route": "LINESTRING (59.557710772175795 36.28857021126669, 59.55968013271732 36.292981810238715)"
 }'
 ```
 
