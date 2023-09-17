@@ -2,7 +2,6 @@ package com.neshan.routingreporter.controller;
 
 import com.neshan.routingreporter.dto.ReportDto;
 import com.neshan.routingreporter.dto.RouteDto;
-import com.neshan.routingreporter.repository.TrafficReportRepository;
 import com.neshan.routingreporter.service.RouteService;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
@@ -21,7 +20,6 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RouteV1Controller {
     RouteService routeService;
-    TrafficReportRepository trafficReportRepository;
 
     @GetMapping("/reports")
     @Transactional

@@ -6,7 +6,6 @@ import com.neshan.routingreporter.enums.ReportType;
 import com.neshan.routingreporter.interfaces.ReportInterface;
 import com.neshan.routingreporter.model.PoliceReport;
 import com.neshan.routingreporter.model.User;
-import com.neshan.routingreporter.repository.PoliceReportRepository;
 import com.neshan.routingreporter.request.ReportRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,6 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PoliceReportService implements ReportInterface {
     ReportConfig reportConfig;
-    PoliceReportRepository policeReportRepository;
     ReportService reportService;
 
     @Override
