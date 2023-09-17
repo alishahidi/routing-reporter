@@ -1,12 +1,11 @@
 package com.neshan.routingreporter.service;
 
+import com.neshan.routingreporter.component.ReportFactory;
 import com.neshan.routingreporter.dto.AuthenticationDto;
 import com.neshan.routingreporter.dto.UserDto;
 import com.neshan.routingreporter.enums.Role;
-import com.neshan.routingreporter.mapper.*;
-import com.neshan.routingreporter.model.AccidentReport;
-import com.neshan.routingreporter.model.PoliceReport;
-import com.neshan.routingreporter.model.TrafficReport;
+import com.neshan.routingreporter.mapper.AuthenticationMapper;
+import com.neshan.routingreporter.mapper.RouteMapper;
 import com.neshan.routingreporter.model.User;
 import com.neshan.routingreporter.repository.UserRepository;
 import com.neshan.routingreporter.request.AuthenticationRequest;
@@ -33,6 +32,7 @@ public class AuthenticationService {
     AuthenticationManager authenticationManager;
     UserRepository userRepository;
     ReportService reportService;
+    ReportFactory reportFactory;
 
     public AuthenticationDto register(RegisterRequest request) {
         User user = User
@@ -73,7 +73,7 @@ public class AuthenticationService {
                 .role(user.getRole())
                 .reports(user.getReports()
                         .stream()
-                        .map(reportService::mapToMapper)
+                        .map(ReportFactory::mapToMapper)
                         .filter(Objects::nonNull)
                         .collect(Collectors.toList())
                 )
