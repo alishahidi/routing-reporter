@@ -46,7 +46,6 @@ public class ReportFactory {
     }
 
     public static ReportDto mapToMapper(Report report) {
-        System.out.println(report instanceof PoliceReport);
         if (report instanceof TrafficReport) {
             return TrafficReportMapper.INSTANCE.trafficReportToTrafficReportDto((TrafficReport) report);
         } else if (report instanceof AccidentReport) {

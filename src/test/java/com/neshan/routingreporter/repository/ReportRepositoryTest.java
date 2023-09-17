@@ -41,13 +41,12 @@ class ReportRepositoryTest {
     @Test
     void createReportTest() {
         GeometryFactory geometryFactory = new GeometryFactory();
-        Coordinate coordinate = new Coordinate(35.7004, 51.3376);
 
         AccidentReport accidentReport = AccidentReport.builder()
                 .type(ReportType.ACCIDENT)
                 .isAccept(true)
                 .likeCount(0)
-                .location(geometryFactory.createPoint(coordinate))
+                .location(geometryFactory.createPoint(new Coordinate(35.7004, 51.3376)))
                 .user(user)
                 .build();
 
@@ -59,7 +58,6 @@ class ReportRepositoryTest {
     }
 
     @Test
-
     public void findReportTest() {
         Optional<Report> report = reportRepository.findById(1L);
         assertThat(report).isPresent();
