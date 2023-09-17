@@ -1,8 +1,16 @@
 package com.neshan.routingreporter.component;
 
+import com.neshan.routingreporter.dto.ReportDto;
 import com.neshan.routingreporter.enums.ReportType;
 import com.neshan.routingreporter.interfaces.ReportInterface;
+import com.neshan.routingreporter.mapper.AccidentReportMapper;
+import com.neshan.routingreporter.mapper.PoliceReportMapper;
+import com.neshan.routingreporter.mapper.ReportMapper;
+import com.neshan.routingreporter.mapper.TrafficReportMapper;
+import com.neshan.routingreporter.model.AccidentReport;
+import com.neshan.routingreporter.model.PoliceReport;
 import com.neshan.routingreporter.model.Report;
+import com.neshan.routingreporter.model.TrafficReport;
 import com.neshan.routingreporter.service.AccidentReportService;
 import com.neshan.routingreporter.service.PoliceReportService;
 import com.neshan.routingreporter.service.TrafficReportService;
@@ -28,12 +36,24 @@ public class ReportFactory {
         };
     }
 
-    public ReportType findTypeByClass(Report report){
-        return switch (report.getClass().getSimpleName()){
+    public static ReportType findTypeByClass(Report report) {
+        return switch (report.getClass().getSimpleName()) {
             case "TrafficReport" -> ReportType.TRAFFIC;
             case "AccidentReport" -> ReportType.ACCIDENT;
             case "PoliceReport" -> ReportType.POLICE;
             default -> throw new IllegalArgumentException("Invalid report type");
         };
+    }
+
+    public static ReportDto mapToMapper(Report report) {
+        System.out.println(report instanceof PoliceReport);
+        if (report instanceof TrafficReport) {
+            return TrafficReportMapper.INSTANCE.trafficReportToTrafficReportDto((TrafficReport) report);
+        } else if (report instanceof AccidentReport) {
+            return AccidentReportMapper.INSTANCE.accidentReportToAccidentReportDto((AccidentReport) report);
+        } else if (report instanceof PoliceReport) {
+            return PoliceReportMapper.INSTANCE.policeReportToPoliceReportDto((PoliceReport) report);
+        }
+        return ReportMapper.INSTANCE.toReportDto(report);
     }
 }
