@@ -8,7 +8,7 @@ import java.util.List;
 public interface ReportInterface {
     ReportDto create(ReportRequest request);
 
-    List<ReportDto> getAll();
+    List<ReportDto> getAll(Boolean accepted);
 
     ReportDto like(Long id);
 

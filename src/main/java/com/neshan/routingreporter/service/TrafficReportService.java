@@ -55,8 +55,8 @@ public class TrafficReportService implements ReportInterface {
     }
 
     @Override
-    public List<ReportDto> getAll() {
-        return reportService.getAllByType(ReportType.TRAFFIC);
+    public List<ReportDto> getAll(Boolean accepted) {
+        return reportService.getAllByType(ReportType.TRAFFIC, accepted);
     }
 
     @Override

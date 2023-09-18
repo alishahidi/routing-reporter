@@ -42,7 +42,7 @@ public class CameraReportService implements ReportInterface {
                 .expiredAt(null)
                 .user(user)
                 .likeCount(0)
-                .isAccept(true)
+                .isAccept(false)
                 .type(ReportType.CAMERA)
                 .location(point)
                 .build();
@@ -51,8 +51,8 @@ public class CameraReportService implements ReportInterface {
     }
 
     @Override
-    public List<ReportDto> getAll() {
-        return reportService.getAllByType(ReportType.CAMERA);
+    public List<ReportDto> getAll(Boolean accepted) {
+        return reportService.getAllByType(ReportType.CAMERA, accepted);
     }
 
     @Override

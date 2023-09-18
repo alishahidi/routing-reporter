@@ -52,9 +52,3 @@ spring:
 server:
   error:
     include-message: always
-
-logging:
-  level:
-    org:
-      springframework:
-        security: DEBUG

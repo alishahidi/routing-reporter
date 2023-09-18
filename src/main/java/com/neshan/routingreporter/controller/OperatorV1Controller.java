@@ -20,11 +20,12 @@ public class OperatorV1Controller {
     ReportService reportService;
 
     @GetMapping("/report/get")
-    public List<ReportDto> getAll(@RequestParam(name = "type", required = false) String type) {
+    public List<ReportDto> getAll(@RequestParam(name = "type", required = false) String type, @RequestParam(name = "accept", required = false) Boolean accept) {
+        Boolean isAccept = accept != null && accept;
         if (type == null) {
-            return reportService.getAll();
+            return reportService.getAll(isAccept);
         }
-        return reportFactory.makeReport(ReportType.valueOf(type.toUpperCase())).getAll();
+        return reportFactory.makeReport(ReportType.valueOf(type.toUpperCase())).getAll(isAccept);
     }
 
     @PutMapping("/report/accept/{id}")

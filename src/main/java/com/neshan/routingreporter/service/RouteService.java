@@ -54,8 +54,4 @@ public class RouteService {
                         .build()
         ));
     }
-
-    public List<RouteDto> getAll() {
-        return routeRepository.findAll().stream().map(RouteMapper.INSTANCE::routeToRouteDto).toList();
-    }
 }

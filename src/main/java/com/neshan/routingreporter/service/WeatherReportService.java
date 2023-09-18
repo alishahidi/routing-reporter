@@ -55,8 +55,8 @@ public class WeatherReportService implements ReportInterface {
     }
 
     @Override
-    public List<ReportDto> getAll() {
-        return reportService.getAllByType(ReportType.WEATHER);
+    public List<ReportDto> getAll(Boolean accepted) {
+        return reportService.getAllByType(ReportType.WEATHER, accepted);
     }
 
     @Override

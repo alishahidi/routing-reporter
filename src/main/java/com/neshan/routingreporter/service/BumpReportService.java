@@ -51,8 +51,8 @@ public class BumpReportService implements ReportInterface {
     }
 
     @Override
-    public List<ReportDto> getAll() {
-        return reportService.getAllByType(ReportType.BUMP);
+    public List<ReportDto> getAll(Boolean accepted) {
+        return reportService.getAllByType(ReportType.BUMP, accepted);
     }
 
     @Override

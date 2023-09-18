@@ -54,8 +54,8 @@ public class PoliceReportService implements ReportInterface {
     }
 
     @Override
-    public List<ReportDto> getAll() {
-        return reportService.getAllByType(ReportType.POLICE);
+    public List<ReportDto> getAll(Boolean accepted) {
+        return reportService.getAllByType(ReportType.POLICE, accepted);
     }
 
     @Override

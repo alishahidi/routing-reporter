@@ -78,9 +78,9 @@ class ReportServiceTest {
 
     @Test
     void getAllReportTest() {
-        Mockito.when(reportRepository.findAll()).thenReturn(reports);
+        Mockito.when(reportRepository.findAllByAccept(false)).thenReturn(reports);
 
-        List<ReportDto> result = reportService.getAll();
+        List<ReportDto> result = reportService.getAll(false);
         assertThat(result).hasSize(2);
         assertThat(result.get(0).getId()).isEqualTo(1L);
         assertThat(result.get(0).getType()).isEqualTo(ReportType.ACCIDENT);
@@ -152,9 +152,9 @@ class ReportServiceTest {
 
     @Test
     void getAllByTypeTest() {
-        Mockito.when(reportRepository.findAllByType(ReportType.TRAFFIC)).thenReturn(List.of(reports.get(1)));
+        Mockito.when(reportRepository.findAllAcceptByType(ReportType.TRAFFIC, false)).thenReturn(List.of(reports.get(1)));
 
-        List<ReportDto> reports = reportService.getAllByType(ReportType.TRAFFIC);
+        List<ReportDto> reports = reportService.getAllByType(ReportType.TRAFFIC, false);
         TrafficReportDto trafficReportDto = (TrafficReportDto) reports.get(0);
 
         assertThat(trafficReportDto.getTrafficType()).isEqualTo(TrafficType.SOFT);

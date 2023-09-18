@@ -30,8 +30,8 @@ public class ReportService {
     ReportRepository reportRepository;
     RedissonClient redissonClient;
 
-    public List<ReportDto> getAll() {
-        return reportRepository.findAll().stream()
+    public List<ReportDto> getAll(Boolean accepted) {
+        return reportRepository.findAllByAccept(accepted).stream()
                 .map(ReportFactory::mapToMapper)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
@@ -62,8 +62,8 @@ public class ReportService {
         }
     }
 
-    public List<ReportDto> getAllByType(ReportType reportType) {
-        return reportRepository.findAllByType(reportType)
+    public List<ReportDto> getAllByType(ReportType reportType, Boolean accepted) {
+        return reportRepository.findAllAcceptByType(reportType, accepted)
                 .stream()
                 .map(ReportFactory::mapToMapper)
                 .collect(Collectors.toList());
