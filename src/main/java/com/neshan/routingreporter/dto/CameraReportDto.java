@@ -1,19 +1,17 @@
 package com.neshan.routingreporter.dto;
 
+import com.neshan.routingreporter.enums.CameraType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
+import lombok.experimental.SuperBuilder;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RouteReportsDto {
-    List<TrafficReportDto> traffic;
-    List<AccidentReportDto> accident;
-    List<PoliceReportDto> police;
+public class CameraReportDto extends ReportDto {
+    CameraType cameraType;
 
 }
