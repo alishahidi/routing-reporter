@@ -4,7 +4,6 @@ import com.neshan.routingreporter.component.ReportFactory;
 import com.neshan.routingreporter.dto.ReportDto;
 import com.neshan.routingreporter.enums.ReportType;
 import com.neshan.routingreporter.service.ReportService;
-import com.neshan.routingreporter.service.TrafficReportService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -30,6 +29,6 @@ public class OperatorV1Controller {
 
     @PutMapping("/report/accept/{id}")
     public ReportDto accept(@PathVariable Long id) {
-        return reportFactory.makeReport(reportFactory.findTypeByClass(reportService.getById(id))).accept(id);
+        return reportFactory.makeReport(reportService.getById(id).getType()).accept(id);
     }
 }

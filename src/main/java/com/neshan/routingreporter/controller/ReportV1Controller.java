@@ -3,7 +3,6 @@ package com.neshan.routingreporter.controller;
 import com.neshan.routingreporter.component.ReportFactory;
 import com.neshan.routingreporter.dto.ReportDto;
 import com.neshan.routingreporter.enums.ReportType;
-import com.neshan.routingreporter.repository.ReportRepository;
 import com.neshan.routingreporter.request.ReportRequest;
 import com.neshan.routingreporter.service.ReportService;
 import lombok.AccessLevel;
@@ -28,12 +27,12 @@ public class ReportV1Controller {
 
     @PutMapping("/like/{id}")
     public ReportDto likeReport(@PathVariable Long id) {
-        return reportFactory.makeReport(reportFactory.findTypeByClass(reportService.getById(id))).like(id);
+        return reportFactory.makeReport(reportService.getById(id).getType()).like(id);
     }
 
     @PutMapping("/dislike/{id}")
     public ReportDto disLikeReport(@PathVariable Long id) {
-        return reportFactory.makeReport(reportFactory.findTypeByClass(reportService.getById(id))).disLike(id);
+        return reportFactory.makeReport(reportService.getById(id).getType()).disLike(id);
     }
 
     @GetMapping("/top/{limit}/{type}")

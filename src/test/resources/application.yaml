@@ -22,7 +22,14 @@ report:
     like:
       ttl: 20
     dis-like:
-      ttl: 10
+      ttl: 8
+  weather:
+    init:
+      ttl: 60
+    like:
+      ttl: 50
+    dis-like:
+      ttl: 20
 
 spring:
   cache:

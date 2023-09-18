@@ -34,18 +34,6 @@ public class ReportFactory {
         };
     }
 
-    public static ReportType findTypeByClass(Report report) {
-        return switch (report.getClass().getSimpleName()) {
-            case "TrafficReport" -> ReportType.TRAFFIC;
-            case "AccidentReport" -> ReportType.ACCIDENT;
-            case "PoliceReport" -> ReportType.POLICE;
-            case "WeatherReport" -> ReportType.WEATHER;
-            case "BumpReport" -> ReportType.BUMP;
-            case "CameraReport" -> ReportType.CAMERA;
-            default -> throw new IllegalArgumentException("Invalid report type");
-        };
-    }
-
     public static ReportDto mapToMapper(Report report) {
         if (report instanceof TrafficReport) {
             return TrafficReportMapper.INSTANCE.trafficReportToTrafficReportDto((TrafficReport) report);
