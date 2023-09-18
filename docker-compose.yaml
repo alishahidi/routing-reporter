@@ -32,7 +32,7 @@ services:
       - DB_PORT=5432
       - DB_USER=postgres
       - DB_PASS=1376gtid
-      - DB_SCHEMA=traffic
+      - DB_SCHEMA=traffic_1
 
 volumes:
   redis:

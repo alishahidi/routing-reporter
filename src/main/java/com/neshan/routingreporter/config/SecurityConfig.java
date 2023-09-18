@@ -1,5 +1,6 @@
 package com.neshan.routingreporter.config;
 
+import com.neshan.routingreporter.enums.Role;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -31,12 +32,12 @@ public class SecurityConfig {
                                 "/api/v*/auth/register",
                                 "/api/v*/auth/login"
                         ).permitAll()
-//                        .requestMatchers(
-//                                "/api/v*/report/**"
-//                        ).hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
-//                        .requestMatchers(
-//                                "/api/v*/operator/**"
-//                        ).hasAnyAuthority(Role.OPERATOR.name(), Role.USER.name())
+                        .requestMatchers(
+                                "/api/v*/report/**"
+                        ).hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
+                        .requestMatchers(
+                                "/api/v*/operator/**"
+                        ).hasAnyAuthority(Role.OPERATOR.name(), Role.USER.name())
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
