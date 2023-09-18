@@ -4,13 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neshan.routingreporter.dto.AccidentReportDto;
 import com.neshan.routingreporter.enums.AccidentType;
 import com.neshan.routingreporter.enums.ReportType;
-import com.neshan.routingreporter.enums.Role;
 import com.neshan.routingreporter.enums.TrafficType;
 import com.neshan.routingreporter.mapper.AccidentReportMapper;
 import com.neshan.routingreporter.model.AccidentReport;
 import com.neshan.routingreporter.model.Report;
 import com.neshan.routingreporter.model.TrafficReport;
-import com.neshan.routingreporter.model.User;
 import com.neshan.routingreporter.request.ReportRequest;
 import com.neshan.routingreporter.service.AccidentReportService;
 import com.neshan.routingreporter.service.ReportService;
@@ -67,14 +65,6 @@ class ReportV1ControllerTest {
                     .location(geometryFactory.createPoint(new Coordinate(36.7004, 51.3376)))
                     .build()
     );
-
-    private final User user = User.builder()
-            .id(1L)
-            .name("Ali Shahidi")
-            .role(Role.ADMIN)
-            .password("testpass")
-            .username("alishahidi")
-            .build();
 
     @Test
     void createReportTest() throws Exception {
