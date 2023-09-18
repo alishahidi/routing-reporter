@@ -3,14 +3,8 @@ package com.neshan.routingreporter.component;
 import com.neshan.routingreporter.dto.ReportDto;
 import com.neshan.routingreporter.enums.ReportType;
 import com.neshan.routingreporter.interfaces.ReportInterface;
-import com.neshan.routingreporter.mapper.AccidentReportMapper;
-import com.neshan.routingreporter.mapper.PoliceReportMapper;
-import com.neshan.routingreporter.mapper.ReportMapper;
-import com.neshan.routingreporter.mapper.TrafficReportMapper;
-import com.neshan.routingreporter.model.AccidentReport;
-import com.neshan.routingreporter.model.PoliceReport;
-import com.neshan.routingreporter.model.Report;
-import com.neshan.routingreporter.model.TrafficReport;
+import com.neshan.routingreporter.mapper.*;
+import com.neshan.routingreporter.model.*;
 import com.neshan.routingreporter.service.*;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +39,9 @@ public class ReportFactory {
             case "TrafficReport" -> ReportType.TRAFFIC;
             case "AccidentReport" -> ReportType.ACCIDENT;
             case "PoliceReport" -> ReportType.POLICE;
+            case "WeatherReport" -> ReportType.WEATHER;
+            case "BumpReport" -> ReportType.BUMP;
+            case "CameraReport" -> ReportType.CAMERA;
             default -> throw new IllegalArgumentException("Invalid report type");
         };
     }
@@ -56,6 +53,12 @@ public class ReportFactory {
             return AccidentReportMapper.INSTANCE.accidentReportToAccidentReportDto((AccidentReport) report);
         } else if (report instanceof PoliceReport) {
             return PoliceReportMapper.INSTANCE.policeReportToPoliceReportDto((PoliceReport) report);
+        } else if (report instanceof WeatherReport) {
+            return WeatherReportMapper.INSTANCE.weatherReportToWeatherReportDto((WeatherReport) report);
+        } else if (report instanceof BumpReport) {
+            return BumpReportMapper.INSTANCE.bumpReportToBumpReportDto((BumpReport) report);
+        } else if (report instanceof CameraReport) {
+            return CameraReportMapper.INSTANCE.cameraReportToCameraReportDto((CameraReport) report);
         }
         return ReportMapper.INSTANCE.toReportDto(report);
     }

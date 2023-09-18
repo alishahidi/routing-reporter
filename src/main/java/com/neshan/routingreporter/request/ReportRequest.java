@@ -1,10 +1,7 @@
 package com.neshan.routingreporter.request;
 
 import com.neshan.routingreporter.dto.ReportDto;
-import com.neshan.routingreporter.enums.AccidentType;
-import com.neshan.routingreporter.enums.PoliceType;
-import com.neshan.routingreporter.enums.ReportType;
-import com.neshan.routingreporter.enums.TrafficType;
+import com.neshan.routingreporter.enums.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,5 +17,7 @@ public class ReportRequest {
     TrafficType trafficType;
     AccidentType accidentType;
     PoliceType policeType;
+    WeatherType weatherType;
+    CameraType cameraType;
 
 }

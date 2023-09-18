@@ -4,8 +4,8 @@ import com.neshan.routingreporter.config.ReportConfig;
 import com.neshan.routingreporter.dto.ReportDto;
 import com.neshan.routingreporter.enums.ReportType;
 import com.neshan.routingreporter.interfaces.ReportInterface;
-import com.neshan.routingreporter.model.AccidentReport;
 import com.neshan.routingreporter.model.User;
+import com.neshan.routingreporter.model.WeatherReport;
 import com.neshan.routingreporter.request.ReportRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -41,12 +41,12 @@ public class WeatherReportService implements ReportInterface {
         }
         point.setSRID(3857);
 
-        AccidentReport report = AccidentReport.builder()
+        WeatherReport report = WeatherReport.builder()
                 .expiredAt(LocalDateTime.now().plusMinutes(reportConfig.getInitWeatherTtl()))
                 .user(user)
                 .likeCount(0)
                 .isAccept(true)
-                .accidentType(request.getAccidentType())
+                .weatherType(request.getWeatherType())
                 .type(ReportType.WEATHER)
                 .location(point)
                 .build();

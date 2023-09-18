@@ -58,7 +58,7 @@ class ReportRepositoryTest {
     }
 
     @Test
-    public void findReportTest() {
+    void findReportTest() {
         Optional<Report> report = reportRepository.findById(1L);
         assertThat(report).isPresent();
         AccidentReport accidentReport = (AccidentReport) report.get();
@@ -66,7 +66,7 @@ class ReportRepositoryTest {
     }
 
     @Test
-    public void updateReportTest() {
+    void updateReportTest() {
         Optional<Report> reportOptional = reportRepository.findById(1L);
         assertThat(reportOptional).isPresent();
         AccidentReport accidentReport = (AccidentReport) reportOptional.get();
@@ -80,7 +80,7 @@ class ReportRepositoryTest {
     }
 
     @Test
-    public void deleteReportTest() {
+    void deleteReportTest() {
         Optional<Report> reportOptional = reportRepository.findById(1L);
         assertThat(reportOptional).isPresent();
         reportOptional.ifPresent(reportRepository::delete);

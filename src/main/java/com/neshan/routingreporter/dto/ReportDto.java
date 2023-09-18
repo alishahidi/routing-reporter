@@ -19,6 +19,7 @@ public class ReportDto {
     String location;
     ReportType type;
     Integer likeCount;
+    Boolean isAccept;
     LocalDateTime expiredAt;
     Date createdAt;
     Date updatedAt;
