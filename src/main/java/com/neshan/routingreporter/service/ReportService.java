@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -68,28 +69,28 @@ public class ReportService {
                 .collect(Collectors.toList());
     }
 
-    public ReportDto like(Long id, Integer ttl) {
+    public ReportDto like(Long id, @Nullable Integer ttl) {
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         report.setLikeCount(report.getLikeCount() + 1);
-        report.setExpiredAt(LocalDateTime.now().plusMinutes(ttl));
+        report.setExpiredAt(ttl != null ? LocalDateTime.now().plusMinutes(ttl) : null);
         return ReportFactory.mapToMapper(reportRepository.save(report));
     }
 
-    public ReportDto disLike(Long id, Integer ttl) {
+    public ReportDto disLike(Long id, @Nullable Integer ttl) {
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         report.setLikeCount(report.getLikeCount() - 1);
-        report.setExpiredAt(report.getExpiredAt().minusMinutes(ttl));
+        report.setExpiredAt(ttl != null ? report.getExpiredAt().minusMinutes(ttl) : null);
         return ReportFactory.mapToMapper(reportRepository.save(report));
     }
 
-    public ReportDto accept(Long id, Integer ttl) {
+    public ReportDto accept(Long id, @Nullable Integer ttl) {
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         report.setIsAccept(true);
-        report.setExpiredAt(LocalDateTime.now().plusMinutes(ttl));
+        report.setExpiredAt(ttl != null ? LocalDateTime.now().plusMinutes(ttl) : null);
         return ReportFactory.mapToMapper(reportRepository.save(report));
     }
 

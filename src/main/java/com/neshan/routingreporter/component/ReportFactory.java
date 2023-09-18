@@ -11,9 +11,7 @@ import com.neshan.routingreporter.model.AccidentReport;
 import com.neshan.routingreporter.model.PoliceReport;
 import com.neshan.routingreporter.model.Report;
 import com.neshan.routingreporter.model.TrafficReport;
-import com.neshan.routingreporter.service.AccidentReportService;
-import com.neshan.routingreporter.service.PoliceReportService;
-import com.neshan.routingreporter.service.TrafficReportService;
+import com.neshan.routingreporter.service.*;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -26,12 +24,18 @@ public class ReportFactory {
     TrafficReportService trafficReportService;
     PoliceReportService policeReportService;
     AccidentReportService accidentReportService;
+    CameraReportService cameraReportService;
+    BumpReportService bumpReportService;
+    WeatherReportService weatherReportService;
 
     public ReportInterface makeReport(ReportType reportType) {
         return switch (reportType) {
             case TRAFFIC -> trafficReportService;
             case ACCIDENT -> accidentReportService;
             case POLICE -> policeReportService;
+            case CAMERA -> cameraReportService;
+            case WEATHER -> weatherReportService;
+            case BUMP -> bumpReportService;
             default -> throw new IllegalArgumentException("Invalid report type");
         };
     }

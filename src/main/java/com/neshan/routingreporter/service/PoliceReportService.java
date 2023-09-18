@@ -69,6 +69,11 @@ public class PoliceReportService implements ReportInterface {
     }
 
     @Override
+    public ReportDto accept(Long id) {
+        return reportService.accept(id, reportConfig.getInitPoliceTtl());
+    }
+
+    @Override
     public List<Integer> findTopHours(Integer limit) {
         return reportService.findTopHours(limit, ReportType.POLICE);
     }

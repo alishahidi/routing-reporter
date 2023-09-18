@@ -17,7 +17,8 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
             "FROM Report r " +
             "WHERE r.type = ?3 " +
             "AND ST_Equals(r.location, ?1) = true " +
-            "AND r.expiredAt > CURRENT_TIMESTAMP " +
+            "AND (r.expiredAt > NOW() OR r.expiredAt = null) " +
+            "AND r.likeCount > -2 " +
             "AND r.user.id = ?2")
     boolean existsReportByLocationAndExpiredAt(Point point, Long userId, ReportType type);
 
@@ -27,17 +28,18 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
             "  SELECT MIN(sub.id) " +
             "  FROM Report sub " +
             "  WHERE ST_Intersects(sub.location, ST_Buffer(ST_GeomFromText(?1, 3857), 10 * 0.0001)) = true " +
-            "  AND sub.expiredAt > NOW() " +
+            "  AND (r.expiredAt > NOW() OR r.expiredAt = null) " +
             "  AND sub.likeCount > -2 " +
             "  GROUP BY ST_AsText(sub.location), sub.type" +
             ")")
     List<Report> findReportsWithinRouteRadius(String route);
 
-    @Query("SELECT CAST(DATE_PART('hour', r.createdAt) AS INTEGER) AS trafficHour, COUNT(r) AS trafficCount " +
+    @Query("SELECT CAST(DATE_PART('hour', r.createdAt) AS INTEGER) AS rh, COUNT(r) AS rc " +
             "FROM Report r " +
             "WHERE r.type = ?2 " +
-            "GROUP BY trafficHour " +
-            "ORDER BY trafficCount DESC " +
+            "AND r.likeCount > -2 " +
+            "GROUP BY rh " +
+            "ORDER BY rc DESC " +
             "LIMIT ?1")
     List<Integer> findTopHoursReport(Integer limit, ReportType type);
 
