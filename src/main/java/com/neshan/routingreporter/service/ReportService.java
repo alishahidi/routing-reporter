@@ -1,7 +1,9 @@
 package com.neshan.routingreporter.service;
 
 import com.neshan.routingreporter.component.ReportFactory;
+import com.neshan.routingreporter.dto.LikeDto;
 import com.neshan.routingreporter.dto.ReportDto;
+import com.neshan.routingreporter.enums.LikeType;
 import com.neshan.routingreporter.enums.ReportType;
 import com.neshan.routingreporter.model.Report;
 import com.neshan.routingreporter.model.User;
@@ -10,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.redisson.api.RLock;
+import org.redisson.api.RMapCache;
 import org.redisson.api.RedissonClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
@@ -70,6 +73,15 @@ public class ReportService {
     }
 
     public ReportDto like(Long id, @Nullable Integer ttl) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        RMapCache<Long, LikeDto> likeCache = redissonClient.getMapCache("likes");
+        if (!likeCache.isEmpty()) {
+            checkDuplicateLike(likeCache.get(id), LikeType.LIKE, user.getId());
+        }
+        likeCache.put(id, LikeDto.builder()
+                .userId(user.getId())
+                .type(LikeType.LIKE)
+                .build(), ttl != null ? ttl : 60, TimeUnit.MINUTES);
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         report.setLikeCount(report.getLikeCount() + 1);
@@ -78,6 +90,15 @@ public class ReportService {
     }
 
     public ReportDto disLike(Long id, @Nullable Integer ttl) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        RMapCache<Long, LikeDto> likeCache = redissonClient.getMapCache("likes");
+        if (!likeCache.isEmpty()) {
+            checkDuplicateLike(likeCache.get(id), LikeType.DISLIKE, user.getId());
+        }
+        likeCache.put(id, LikeDto.builder()
+                .userId(user.getId())
+                .type(LikeType.DISLIKE)
+                .build(), ttl != null ? ttl : 60, TimeUnit.MINUTES);
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         report.setLikeCount(report.getLikeCount() - 1);
@@ -96,5 +117,11 @@ public class ReportService {
 
     public List<Integer> findTopHours(Integer limit, ReportType type) {
         return reportRepository.findTopHoursReport(limit, type);
+    }
+
+    private void checkDuplicateLike(LikeDto likeDto, LikeType type, Long userId) {
+        if (likeDto != null && likeDto.getType().equals(type) && likeDto.getUserId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Duplicated like.");
+        }
     }
 }
