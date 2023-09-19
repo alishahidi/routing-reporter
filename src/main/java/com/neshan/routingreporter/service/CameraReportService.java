@@ -36,7 +36,7 @@ public class CameraReportService implements ReportInterface {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        point.setSRID(3857);
+        point.setSRID(4326);
 
         CameraReport report = CameraReport.builder()
                 .expiredAt(null)
@@ -52,12 +52,12 @@ public class CameraReportService implements ReportInterface {
 
     @Override
     public ReportDto like(Long id) {
-        return reportService.like(id, null);
+        return reportService.like(ReportType.CAMERA, id, null);
     }
 
     @Override
     public ReportDto disLike(Long id) {
-        return reportService.disLike(id, null);
+        return reportService.disLike(ReportType.CAMERA, id, null);
     }
 
     @Override

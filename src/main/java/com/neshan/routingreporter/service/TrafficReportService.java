@@ -39,7 +39,7 @@ public class TrafficReportService implements ReportInterface {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        point.setSRID(3857);
+        point.setSRID(4326);
 
         TrafficReport report = TrafficReport.builder()
                 .expiredAt(LocalDateTime.now().plusMinutes(reportConfig.getInitTrafficTtl()))
@@ -56,12 +56,12 @@ public class TrafficReportService implements ReportInterface {
 
     @Override
     public ReportDto like(Long id) {
-        return reportService.like(id, reportConfig.getLikeTrafficTtl());
+        return reportService.like(ReportType.TRAFFIC, id, reportConfig.getLikeTrafficTtl());
     }
 
     @Override
     public ReportDto disLike(Long id) {
-        return reportService.disLike(id, reportConfig.getDisLikeTrafficTtl());
+        return reportService.disLike(ReportType.TRAFFIC, id, reportConfig.getDisLikeTrafficTtl());
     }
 
     @Override

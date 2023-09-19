@@ -159,23 +159,26 @@ class ReportServiceTest {
     }
 
     @Test
-    void likeReportTest() {
+    void likeReportTest() throws InterruptedException {
         Mockito.when(authentication.getPrincipal()).thenReturn(user);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         Report report = reports.get(0);
         report.setLikeCount(0);
 
+        Mockito.when(redissonClient.getLock(ArgumentMatchers.anyString())).thenReturn(lock);
+        Mockito.when(lock.tryLock(40, TimeUnit.SECONDS)).thenReturn(true);
+
         Mockito.when(reportRepository.findById(1L)).thenReturn(Optional.of(report));
         Mockito.when(reportRepository.save(ArgumentMatchers.any(Report.class))).thenReturn(report);
-        ReportDto result = reportService.like(1L, 30);
+        ReportDto result = reportService.like(ReportType.ACCIDENT, 1L, 30);
 
         assertThat(result).isNotNull();
         assertThat(result.getLikeCount()).isEqualTo(1);
     }
 
     @Test
-    void disLikeReportTest() {
+    void disLikeReportTest() throws InterruptedException {
         Mockito.when(authentication.getPrincipal()).thenReturn(user);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -183,9 +186,12 @@ class ReportServiceTest {
         report.setLikeCount(0);
         report.setExpiredAt(LocalDateTime.now());
 
+        Mockito.when(redissonClient.getLock(ArgumentMatchers.anyString())).thenReturn(lock);
+        Mockito.when(lock.tryLock(40, TimeUnit.SECONDS)).thenReturn(true);
+
         Mockito.when(reportRepository.findById(1L)).thenReturn(Optional.of(report));
         Mockito.when(reportRepository.save(ArgumentMatchers.any(Report.class))).thenReturn(report);
-        ReportDto result = reportService.disLike(1L, 30);
+        ReportDto result = reportService.disLike(ReportType.ACCIDENT, 1L, 30);
 
         assertThat(result).isNotNull();
         assertThat(result.getLikeCount()).isEqualTo(-1);

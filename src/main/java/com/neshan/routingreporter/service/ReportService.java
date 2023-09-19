@@ -46,7 +46,7 @@ public class ReportService {
 
     public ReportDto create(Report report) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String lockKey = report.getType() + "_report_creation_lock_" + report.getLocation().toText().hashCode();
+        String lockKey = report.getType() + "_report_creation_lock_" + user.getId();
         RLock lock = redissonClient.getLock(lockKey);
         try {
             boolean isLocked = lock.tryLock(40, TimeUnit.SECONDS);
@@ -72,42 +72,68 @@ public class ReportService {
                 .collect(Collectors.toList());
     }
 
-    public ReportDto like(Long id, @Nullable Integer ttl) {
+    public ReportDto like(ReportType type, Long id, @Nullable Integer ttl) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        RMapCache<Long, LikeDto> likeCache = redissonClient.getMapCache("likes");
-        if (likeCache != null) {
-            if (!likeCache.isEmpty()) {
-                checkDuplicateLike(likeCache.get(id), LikeType.LIKE, user.getId());
+        String lockKey = type + "_report_like_lock_" + user.getId();
+        RLock lock = redissonClient.getLock(lockKey);
+        try {
+            boolean isLocked = lock.tryLock(40, TimeUnit.SECONDS);
+            if (isLocked) {
+                RMapCache<Long, LikeDto> likeCache = redissonClient.getMapCache("likes");
+                if (likeCache != null) {
+                    if (!likeCache.isEmpty()) {
+                        checkDuplicateLike(likeCache.get(id), LikeType.LIKE, user.getId());
+                    }
+                    likeCache.put(id, LikeDto.builder()
+                            .userId(user.getId())
+                            .type(LikeType.LIKE)
+                            .build(), ttl != null ? ttl : 60, TimeUnit.MINUTES);
+                }
+                Report report = reportRepository.findById(id)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                report.setLikeCount(report.getLikeCount() + 1);
+                report.setExpiredAt(ttl != null ? LocalDateTime.now().plusMinutes(ttl) : null);
+                return ReportFactory.mapToMapper(reportRepository.save(report));
+            } else {
+                return null;
             }
-            likeCache.put(id, LikeDto.builder()
-                    .userId(user.getId())
-                    .type(LikeType.LIKE)
-                    .build(), ttl != null ? ttl : 60, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            lock.unlock();
         }
-        Report report = reportRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        report.setLikeCount(report.getLikeCount() + 1);
-        report.setExpiredAt(ttl != null ? LocalDateTime.now().plusMinutes(ttl) : null);
-        return ReportFactory.mapToMapper(reportRepository.save(report));
     }
 
-    public ReportDto disLike(Long id, @Nullable Integer ttl) {
+    public ReportDto disLike(ReportType type, Long id, @Nullable Integer ttl) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        RMapCache<Long, LikeDto> likeCache = redissonClient.getMapCache("likes");
-        if (likeCache != null) {
-            if (!likeCache.isEmpty()) {
-                checkDuplicateLike(likeCache.get(id), LikeType.DISLIKE, user.getId());
+        String lockKey = type + "_report_dislike_lock_" + user.getId();
+        RLock lock = redissonClient.getLock(lockKey);
+        try {
+            boolean isLocked = lock.tryLock(40, TimeUnit.SECONDS);
+            if (isLocked) {
+                RMapCache<Long, LikeDto> likeCache = redissonClient.getMapCache("likes");
+                if (likeCache != null) {
+                    if (!likeCache.isEmpty()) {
+                        checkDuplicateLike(likeCache.get(id), LikeType.DISLIKE, user.getId());
+                    }
+                    likeCache.put(id, LikeDto.builder()
+                            .userId(user.getId())
+                            .type(LikeType.DISLIKE)
+                            .build(), ttl != null ? ttl : 60, TimeUnit.MINUTES);
+                }
+                Report report = reportRepository.findById(id)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                report.setLikeCount(report.getLikeCount() - 1);
+                report.setExpiredAt(ttl != null ? report.getExpiredAt().minusMinutes(ttl) : null);
+                return ReportFactory.mapToMapper(reportRepository.save(report));
+            } else {
+                return null;
             }
-            likeCache.put(id, LikeDto.builder()
-                    .userId(user.getId())
-                    .type(LikeType.DISLIKE)
-                    .build(), ttl != null ? ttl : 60, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            lock.unlock();
         }
-        Report report = reportRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        report.setLikeCount(report.getLikeCount() - 1);
-        report.setExpiredAt(ttl != null ? report.getExpiredAt().minusMinutes(ttl) : null);
-        return ReportFactory.mapToMapper(reportRepository.save(report));
     }
 
     public ReportDto accept(Long id, @Nullable Integer ttl) {

@@ -27,6 +27,6 @@ public class Route {
     @JsonIgnore
     User user;
 
-    @Column(columnDefinition = "geometry(LineString,3857)")
+    @Column(columnDefinition = "geometry(LineString,4326)")
     LineString route;
 }

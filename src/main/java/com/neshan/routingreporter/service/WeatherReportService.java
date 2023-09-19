@@ -39,7 +39,7 @@ public class WeatherReportService implements ReportInterface {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        point.setSRID(3857);
+        point.setSRID(4326);
 
         WeatherReport report = WeatherReport.builder()
                 .expiredAt(LocalDateTime.now().plusMinutes(reportConfig.getInitWeatherTtl()))
@@ -56,12 +56,12 @@ public class WeatherReportService implements ReportInterface {
 
     @Override
     public ReportDto like(Long id) {
-        return reportService.like(id, reportConfig.getLikeWeatherTtl());
+        return reportService.like(ReportType.WEATHER, id, reportConfig.getLikeWeatherTtl());
     }
 
     @Override
     public ReportDto disLike(Long id) {
-        return reportService.disLike(id, reportConfig.getDisLikeWeatherTtl());
+        return reportService.disLike(ReportType.WEATHER, id, reportConfig.getDisLikeWeatherTtl());
     }
 
     @Override

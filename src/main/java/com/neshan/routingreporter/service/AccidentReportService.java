@@ -39,7 +39,7 @@ public class AccidentReportService implements ReportInterface {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        point.setSRID(3857);
+        point.setSRID(4326);
 
         AccidentReport report = AccidentReport.builder()
                 .expiredAt(LocalDateTime.now().plusMinutes(reportConfig.getInitAccidentTtl()))
@@ -56,12 +56,12 @@ public class AccidentReportService implements ReportInterface {
 
     @Override
     public ReportDto like(Long id) {
-        return reportService.like(id, reportConfig.getLikeAccidentTtl());
+        return reportService.like(ReportType.ACCIDENT, id, reportConfig.getLikeAccidentTtl());
     }
 
     @Override
     public ReportDto disLike(Long id) {
-        return reportService.disLike(id, reportConfig.getDisLikeAccidentTtl());
+        return reportService.disLike(ReportType.ACCIDENT, id, reportConfig.getDisLikeAccidentTtl());
     }
 
     @Override

@@ -38,7 +38,7 @@ public class PoliceReportService implements ReportInterface {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        point.setSRID(3857);
+        point.setSRID(4326);
 
         PoliceReport report = PoliceReport.builder()
                 .expiredAt(LocalDateTime.now().plusMinutes(reportConfig.getInitPoliceTtl()))
@@ -55,12 +55,12 @@ public class PoliceReportService implements ReportInterface {
 
     @Override
     public ReportDto like(Long id) {
-        return reportService.like(id, reportConfig.getLikePoliceTtl());
+        return reportService.like(ReportType.POLICE, id, reportConfig.getLikePoliceTtl());
     }
 
     @Override
     public ReportDto disLike(Long id) {
-        return reportService.disLike(id, reportConfig.getDisLikePoliceTtl());
+        return reportService.disLike(ReportType.POLICE, id, reportConfig.getDisLikePoliceTtl());
     }
 
     @Override

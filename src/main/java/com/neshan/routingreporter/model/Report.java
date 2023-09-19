@@ -42,7 +42,7 @@ public class Report {
 
     Boolean isAccept;
 
-    @Column(columnDefinition = "geometry(Point,3857)")
+    @Column(columnDefinition = "geometry(Point,4326)")
     Point location;
 
     Integer likeCount;

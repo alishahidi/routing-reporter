@@ -46,7 +46,7 @@ public class RouteService {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        lineString.setSRID(3857);
+        lineString.setSRID(4326);
         return RouteMapper.INSTANCE.routeToRouteDto(routeRepository.save(
                 Route.builder()
                         .route(lineString)
