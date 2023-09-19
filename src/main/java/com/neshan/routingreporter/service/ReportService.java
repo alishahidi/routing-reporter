@@ -46,7 +46,7 @@ public class ReportService {
 
     public ReportDto create(Report report) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String lockKey = report.getType() + "_report_creation_lock_" + user.getId();
+        String lockKey = report.getType() + "_report_creation_lock_" + report.getLocation().toText().hashCode();
         RLock lock = redissonClient.getLock(lockKey);
         try {
             boolean isLocked = lock.tryLock(40, TimeUnit.SECONDS);
