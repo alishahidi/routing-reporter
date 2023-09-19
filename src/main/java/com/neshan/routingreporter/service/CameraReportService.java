@@ -51,11 +51,6 @@ public class CameraReportService implements ReportInterface {
     }
 
     @Override
-    public List<ReportDto> getAll(Boolean accepted) {
-        return reportService.getAllByType(ReportType.CAMERA, accepted);
-    }
-
-    @Override
     public ReportDto like(Long id) {
         return reportService.like(id, null);
     }

@@ -51,11 +51,6 @@ public class BumpReportService implements ReportInterface {
     }
 
     @Override
-    public List<ReportDto> getAll(Boolean accepted) {
-        return reportService.getAllByType(ReportType.BUMP, accepted);
-    }
-
-    @Override
     public ReportDto like(Long id) {
         return reportService.like(id, null);
     }

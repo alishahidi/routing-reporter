@@ -54,11 +54,6 @@ public class PoliceReportService implements ReportInterface {
     }
 
     @Override
-    public List<ReportDto> getAll(Boolean accepted) {
-        return reportService.getAllByType(ReportType.POLICE, accepted);
-    }
-
-    @Override
     public ReportDto like(Long id) {
         return reportService.like(id, reportConfig.getLikePoliceTtl());
     }

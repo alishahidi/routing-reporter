@@ -55,11 +55,6 @@ public class AccidentReportService implements ReportInterface {
     }
 
     @Override
-    public List<ReportDto> getAll(Boolean accepted) {
-        return reportService.getAllByType(ReportType.ACCIDENT, accepted);
-    }
-
-    @Override
     public ReportDto like(Long id) {
         return reportService.like(id, reportConfig.getLikeAccidentTtl());
     }
