@@ -73,6 +73,7 @@ class ReportServiceTest {
 
     @Mock
     private RLock lock;
+
     @Mock
     private RedissonClient redissonClient;
 
@@ -111,9 +112,6 @@ class ReportServiceTest {
 
         Mockito.when(redissonClient.getLock(ArgumentMatchers.anyString())).thenReturn(lock);
         Mockito.when(lock.tryLock(40, TimeUnit.SECONDS)).thenReturn(true);
-
-        Mockito.when(reportRepository.existsReportByLocationAndExpiredAt(ArgumentMatchers.any(), ArgumentMatchers.anyLong(), ArgumentMatchers.any()))
-                .thenReturn(false);
 
         Report savedReport = reports.get(1);
         Mockito.when(reportRepository.save(ArgumentMatchers.any(Report.class))).thenReturn(savedReport);
@@ -162,6 +160,9 @@ class ReportServiceTest {
 
     @Test
     void likeReportTest() {
+        Mockito.when(authentication.getPrincipal()).thenReturn(user);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         Report report = reports.get(0);
         report.setLikeCount(0);
 
@@ -175,6 +176,9 @@ class ReportServiceTest {
 
     @Test
     void disLikeReportTest() {
+        Mockito.when(authentication.getPrincipal()).thenReturn(user);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         Report report = reports.get(0);
         report.setLikeCount(0);
         report.setExpiredAt(LocalDateTime.now());

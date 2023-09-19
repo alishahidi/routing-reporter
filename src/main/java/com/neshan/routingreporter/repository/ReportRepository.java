@@ -33,7 +33,7 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
             "WHERE r.id IN (" +
             "  SELECT MIN(sub.id) " +
             "  FROM Report sub " +
-            "  WHERE ST_Intersects(sub.location, ST_Buffer(ST_GeomFromText(?1, 3857), 10 * 0.0001)) = true " +
+            "  WHERE ST_DWithin(sub.location, ST_Transform(ST_GeomFromText(?1, 4326), 3857), 10) = true " +
             "  AND (r.expiredAt > NOW() OR r.expiredAt = null) " +
             "  AND sub.likeCount > -2 " +
             "  AND r.isAccept = true " +

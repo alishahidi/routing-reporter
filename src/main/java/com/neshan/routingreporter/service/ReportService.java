@@ -75,13 +75,15 @@ public class ReportService {
     public ReportDto like(Long id, @Nullable Integer ttl) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         RMapCache<Long, LikeDto> likeCache = redissonClient.getMapCache("likes");
-        if (!likeCache.isEmpty()) {
-            checkDuplicateLike(likeCache.get(id), LikeType.LIKE, user.getId());
+        if (likeCache != null) {
+            if (!likeCache.isEmpty()) {
+                checkDuplicateLike(likeCache.get(id), LikeType.LIKE, user.getId());
+            }
+            likeCache.put(id, LikeDto.builder()
+                    .userId(user.getId())
+                    .type(LikeType.LIKE)
+                    .build(), ttl != null ? ttl : 60, TimeUnit.MINUTES);
         }
-        likeCache.put(id, LikeDto.builder()
-                .userId(user.getId())
-                .type(LikeType.LIKE)
-                .build(), ttl != null ? ttl : 60, TimeUnit.MINUTES);
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         report.setLikeCount(report.getLikeCount() + 1);
@@ -92,13 +94,15 @@ public class ReportService {
     public ReportDto disLike(Long id, @Nullable Integer ttl) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         RMapCache<Long, LikeDto> likeCache = redissonClient.getMapCache("likes");
-        if (!likeCache.isEmpty()) {
-            checkDuplicateLike(likeCache.get(id), LikeType.DISLIKE, user.getId());
+        if (likeCache != null) {
+            if (!likeCache.isEmpty()) {
+                checkDuplicateLike(likeCache.get(id), LikeType.DISLIKE, user.getId());
+            }
+            likeCache.put(id, LikeDto.builder()
+                    .userId(user.getId())
+                    .type(LikeType.DISLIKE)
+                    .build(), ttl != null ? ttl : 60, TimeUnit.MINUTES);
         }
-        likeCache.put(id, LikeDto.builder()
-                .userId(user.getId())
-                .type(LikeType.DISLIKE)
-                .build(), ttl != null ? ttl : 60, TimeUnit.MINUTES);
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         report.setLikeCount(report.getLikeCount() - 1);

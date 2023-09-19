@@ -90,7 +90,7 @@ class OperatorV1ControllerTest {
                 .filter(reportDto -> reportDto.getType() == ReportType.ACCIDENT)
                 .toList();
 
-        Mockito.when(accidentReportService.getAll(false)).thenReturn(reportsDto);
+        Mockito.when(reportService.getAllByType(ReportType.ACCIDENT, false)).thenReturn(reportsDto);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/operator/report/get?type=ACCIDENT"))
                 .andExpect(status().isOk())
