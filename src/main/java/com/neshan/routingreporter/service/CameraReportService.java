@@ -44,6 +44,7 @@ public class CameraReportService implements ReportInterface {
                 .likeCount(0)
                 .isAccept(false)
                 .type(ReportType.CAMERA)
+                .cameraType(request.getCameraType())
                 .location(point)
                 .build();
 
