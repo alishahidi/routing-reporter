@@ -31,8 +31,6 @@ public class AuthenticationService {
     JwtService jwtService;
     AuthenticationManager authenticationManager;
     UserRepository userRepository;
-    ReportService reportService;
-    ReportFactory reportFactory;
 
     public AuthenticationDto register(RegisterRequest request) {
         User user = User
